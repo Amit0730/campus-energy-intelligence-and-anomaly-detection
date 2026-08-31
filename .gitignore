@@ -30,8 +30,9 @@ Thumbs.db
 # Streamlit config
 .streamlit/
 
-# Local presentation & viva files (kept locally on computer)
+# Local folders for Report & Viva (kept locally)
+Report/
+Viva/
+scripts/
 *.pptx
-PRESENTATION_SLIDES_COMPLETE_40.md
-VIVA_PREPARATION_GUIDE.md
-generate_ppt.py
+*.pdf
