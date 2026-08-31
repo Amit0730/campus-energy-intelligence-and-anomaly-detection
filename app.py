@@ -56,8 +56,18 @@ st.markdown("""
     [data-testid="stToolbar"] {visibility: hidden; display: none !important;}
     [data-testid="stDecoration"] {visibility: hidden; display: none !important;}
     [data-testid="stSidebarCollapsedControl"] {
-        display: block !important;
+        display: flex !important;
         visibility: visible !important;
+        background-color: #1E3A8A !important;
+        border-radius: 8px !important;
+        padding: 6px 10px !important;
+        margin: 10px !important;
+        z-index: 999999 !important;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    [data-testid="stSidebarCollapsedControl"] svg {
+        fill: #FFFFFF !important;
+        stroke: #FFFFFF !important;
     }
 </style>
 """, unsafe_allow_html=True)
