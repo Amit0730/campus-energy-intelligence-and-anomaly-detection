@@ -51,6 +51,12 @@ st.markdown("""
         border: 1px solid #E2E8F0;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
+    #MainMenu {visibility: hidden; display: none !important;}
+    footer {visibility: hidden; display: none !important;}
+    header {visibility: hidden; display: none !important;}
+    [data-testid="stToolbar"] {visibility: hidden; display: none !important;}
+    [data-testid="stDecoration"] {visibility: hidden; display: none !important;}
+    [data-testid="stHeader"] {visibility: hidden; display: none !important;}
 </style>
 """, unsafe_allow_html=True)
 
@@ -65,8 +71,6 @@ def main():
     # Sidebar
     st.sidebar.image("https://img.icons8.com/fluency/96/electricity.png", width=70)
     st.sidebar.title("Campus Energy AI")
-    st.sidebar.markdown("**INT395: Project 15**")
-    st.sidebar.markdown("*Supervised Learning & Operational Intelligence*")
     st.sidebar.divider()
 
     menu = st.sidebar.radio(
@@ -80,16 +84,6 @@ def main():
             "🎛️ What-If Scenario Simulator",
             "🏛️ Building Benchmarks & EUI"
         ]
-    )
-    
-    st.sidebar.divider()
-    st.sidebar.markdown("### 📋 System Info")
-    st.sidebar.info(
-        "**Target**: Multi-Building Electricity Demand (kWh)\n\n"
-        "**Algorithms**: Ridge, RF, XGBoost, LightGBM, Stacking\n\n"
-        "**Anomaly**: Isolation Forest + Residuals\n\n"
-        "**Explainability**: SHAP TreeExplainer\n\n"
-        "**Status**: Deployed & Active"
     )
 
     try:
