@@ -118,6 +118,10 @@ st.markdown("""
         display: none !important;
         visibility: hidden !important;
     }
+    .modebar-container, .modebar, [data-testid="stPlotlyChart"] .modebar-container, [data-testid="stPlotlyChart"] .modebar {
+        display: none !important;
+        visibility: hidden !important;
+    }
     
     /* 5. Typewriter Cursor Blink */
     @keyframes cursorBlink {
@@ -285,7 +289,7 @@ def main():
                 hovermode="x unified",
                 transition=dict(duration=800, easing="cubic-in-out")
             )
-            st.plotly_chart(fig_agg, width="stretch")
+            st.plotly_chart(fig_agg, config={"displayModeBar": False}, width="stretch")
 
         with c_right:
             st.markdown("#### 🎯 Campus Energy Risk Meter")
@@ -315,7 +319,7 @@ def main():
                 }
             ))
             fig_gauge.update_layout(height=280, margin=dict(l=20, r=20, t=40, b=20), transition=dict(duration=1000, easing="cubic-out"))
-            st.plotly_chart(fig_gauge, width="stretch")
+            st.plotly_chart(fig_gauge, config={"displayModeBar": False}, width="stretch")
 
         st.markdown("#### 🏛️ Monitored Facilities Health Overview")
         b_summary = []
@@ -360,7 +364,7 @@ def main():
                     color_discrete_map={"Weekday": "#3B82F6", "Weekend": "#F59E0B"}
                 )
                 fig_diurn.update_layout(transition=dict(duration=800, easing="cubic-in-out"))
-                st.plotly_chart(fig_diurn, width="stretch")
+                st.plotly_chart(fig_diurn, config={"displayModeBar": False}, width="stretch")
                 
             with col_d2:
                 st.markdown("##### Day of Week Load Distribution")
@@ -371,7 +375,7 @@ def main():
                     labels={"day_name": "Day", "total_power_kwh": "Electricity (kWh)"}
                 )
                 fig_box.update_layout(showlegend=False, transition=dict(duration=800, easing="cubic-in-out"))
-                st.plotly_chart(fig_box, width="stretch")
+                st.plotly_chart(fig_box, config={"displayModeBar": False}, width="stretch")
 
         with eda_tab2:
             st.markdown("##### Outdoor Temperature & Solar Radiation vs Building Power")
@@ -384,7 +388,7 @@ def main():
                     title="Electricity Consumption vs Outdoor Temperature (°C)",
                     labels={"temperature_c": "Temperature (°C)", "total_power_kwh": "Electricity (kWh)", "occupancy_rate": "Occupancy"}
                 )
-                st.plotly_chart(fig_scat, width="stretch")
+                st.plotly_chart(fig_scat, config={"displayModeBar": False}, width="stretch")
             with col_w2:
                 corr_cols = ["total_power_kwh", "temperature_c", "humidity_pct", "solar_radiation_wm2", "occupancy_rate", "cooling_degree_hours"]
                 corr_mat = b_df[corr_cols].corr()
@@ -392,7 +396,7 @@ def main():
                     corr_mat, text_auto=True, aspect="auto", color_continuous_scale="Blues",
                     title="Correlation Matrix with Environmental Features"
                 )
-                st.plotly_chart(fig_corr, width="stretch")
+                st.plotly_chart(fig_corr, config={"displayModeBar": False}, width="stretch")
 
         with eda_tab3:
             st.markdown("##### Sub-Metering Component Breakdown (HVAC, Lighting, Equipment)")
@@ -402,7 +406,7 @@ def main():
             fig_sub.add_trace(go.Scatter(x=sub_components["timestamp"], y=sub_components["lighting_power_kwh"], name="Lighting", stackgroup="one", fillcolor="rgba(234, 179, 8, 0.6)"))
             fig_sub.add_trace(go.Scatter(x=sub_components["timestamp"], y=sub_components["equipment_power_kwh"], name="Equipment / Plug Load", stackgroup="one", fillcolor="rgba(59, 130, 246, 0.6)"))
             fig_sub.update_layout(title="Sub-System Stacked Energy Draw (Past 7 Days)", yaxis_title="Power (kWh)", xaxis_title="Timestamp", transition=dict(duration=800))
-            st.plotly_chart(fig_sub, width="stretch")
+            st.plotly_chart(fig_sub, config={"displayModeBar": False}, width="stretch")
 
         with eda_tab4:
             st.markdown("##### Hourly Load Heatmap Matrix (Hour vs Day of Week)")
@@ -410,7 +414,7 @@ def main():
                 ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
             )
             fig_heat = px.imshow(pivot_table, labels=dict(x="Hour of Day", y="Day of Week", color="Avg kWh"), color_continuous_scale="Turbo")
-            st.plotly_chart(fig_heat, width="stretch")
+            st.plotly_chart(fig_heat, config={"displayModeBar": False}, width="stretch")
 
     # -------------------------------------------------------------
     # TAB 3: DEMAND FORECASTING & MODEL COMPARISON
@@ -458,7 +462,7 @@ def main():
             hovermode="x unified", height=400,
             transition=dict(duration=1000, easing="cubic-in-out")
         )
-        st.plotly_chart(fig_fore, width="stretch")
+        st.plotly_chart(fig_fore, config={"displayModeBar": False}, width="stretch")
         
         # Residual Error Analysis
         residuals = slice_b["total_power_kwh"] - slice_b["chosen_forecast_kwh"]
@@ -469,7 +473,7 @@ def main():
                 labels={"value": "Error (kWh)"}, color_discrete_sequence=["#6366F1"]
             )
             fig_res_dist.update_layout(transition=dict(duration=800))
-            st.plotly_chart(fig_res_dist, width="stretch")
+            st.plotly_chart(fig_res_dist, config={"displayModeBar": False}, width="stretch")
         with col_r2:
             fig_qq = px.scatter(
                 x=slice_b["chosen_forecast_kwh"], y=slice_b["total_power_kwh"],
@@ -480,7 +484,7 @@ def main():
             max_val = max(slice_b["chosen_forecast_kwh"].max(), slice_b["total_power_kwh"].max())
             fig_qq.add_shape(type="line", x0=min_val, y0=min_val, x1=max_val, y1=max_val, line=dict(color="red", dash="dash"))
             fig_qq.update_layout(transition=dict(duration=800))
-            st.plotly_chart(fig_qq, width="stretch")
+            st.plotly_chart(fig_qq, config={"displayModeBar": False}, width="stretch")
 
     # -------------------------------------------------------------
     # TAB 4: ANOMALY DETECTION & WASTAGE ALERT CENTER
@@ -544,7 +548,7 @@ def main():
             xaxis_title="Date", yaxis_title="Power (kWh)", height=400,
             transition=dict(duration=800, easing="cubic-in-out")
         )
-        st.plotly_chart(fig_anom, width="stretch")
+        st.plotly_chart(fig_anom, config={"displayModeBar": False}, width="stretch")
         
         st.markdown("#### 📋 Actionable Anomaly Investigation Log")
         display_cols = ["timestamp", "building_id", "detected_severity", "total_power_kwh", "forecast_kwh", "wasted_energy_kwh", "financial_loss_inr", "root_cause", "recommended_action"]
@@ -566,7 +570,7 @@ def main():
                 title="Top 15 Influential Predictors Across Entire Campus"
             )
             fig_shap_glob.update_layout(yaxis=dict(autorange="reversed"), height=450, transition=dict(duration=800, easing="cubic-out"))
-            st.plotly_chart(fig_shap_glob, width="stretch")
+            st.plotly_chart(fig_shap_glob, config={"displayModeBar": False}, width="stretch")
 
         with col_x2:
             st.markdown("#### 🔬 Local Instance Explainer (Waterfall Decomposition)")
@@ -601,7 +605,7 @@ def main():
                 yaxis_title="Contribution to Load (kWh)", height=350,
                 transition=dict(duration=800)
             )
-            st.plotly_chart(fig_waterfall, width="stretch")
+            st.plotly_chart(fig_waterfall, config={"displayModeBar": False}, width="stretch")
 
     # -------------------------------------------------------------
     # TAB 6: WHAT-IF SCENARIO SIMULATOR
@@ -664,7 +668,7 @@ def main():
             xaxis_title="Time", yaxis_title="Load (kWh)", height=400,
             transition=dict(duration=800, easing="cubic-in-out")
         )
-        st.plotly_chart(fig_sim, width="stretch")
+        st.plotly_chart(fig_sim, config={"displayModeBar": False}, width="stretch")
 
     # -------------------------------------------------------------
     # TAB 7: BUILDING BENCHMARKING & EUI
@@ -714,7 +718,7 @@ def main():
                 text="EUI (kWh/m²/yr)"
             )
             fig_eui.update_layout(transition=dict(duration=1000, easing="cubic-out"))
-            st.plotly_chart(fig_eui, width="stretch")
+            st.plotly_chart(fig_eui, config={"displayModeBar": False}, width="stretch")
         with col_b2:
             fig_par = px.bar(
                 eui_df, x="Building Name", y="Peak-to-Avg Ratio (PAR)", color="Type",
@@ -722,7 +726,7 @@ def main():
                 text="Peak-to-Avg Ratio (PAR)"
             )
             fig_par.update_layout(transition=dict(duration=1000, easing="cubic-out"))
-            st.plotly_chart(fig_par, width="stretch")
+            st.plotly_chart(fig_par, config={"displayModeBar": False}, width="stretch")
 
 
 if __name__ == "__main__":
