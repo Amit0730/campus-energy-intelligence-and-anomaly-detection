@@ -1,0 +1,83 @@
+{
+    "best_model": "XGBoost Regressor",
+    "model_comparison": [
+        {
+            "Model": "XGBoost Regressor",
+            "Train R2": 0.933,
+            "Val R2": 0.9167,
+            "Test R2": 0.8855,
+            "Test RMSE (kWh)": 15.133,
+            "Test MAE (kWh)": 5.587,
+            "Test MAPE (%)": 8.35,
+            "Directional Acc (%)": 95.1,
+            "Train Time (s)": 0.71
+        },
+        {
+            "Model": "LightGBM Regressor",
+            "Train R2": 0.9238,
+            "Val R2": 0.9166,
+            "Test R2": 0.885,
+            "Test RMSE (kWh)": 15.168,
+            "Test MAE (kWh)": 5.69,
+            "Test MAPE (%)": 8.71,
+            "Directional Acc (%)": 95.12,
+            "Train Time (s)": 0.51
+        },
+        {
+            "Model": "Stacking Ensemble",
+            "Train R2": 0.911,
+            "Val R2": 0.913,
+            "Test R2": 0.8796,
+            "Test RMSE (kWh)": 15.518,
+            "Test MAE (kWh)": 6.247,
+            "Test MAPE (%)": 9.32,
+            "Directional Acc (%)": 94.82,
+            "Train Time (s)": 43.33
+        },
+        {
+            "Model": "Random Forest",
+            "Train R2": 0.9623,
+            "Val R2": 0.9079,
+            "Test R2": 0.8761,
+            "Test RMSE (kWh)": 15.745,
+            "Test MAE (kWh)": 6.693,
+            "Test MAPE (%)": 10.18,
+            "Directional Acc (%)": 94.66,
+            "Train Time (s)": 6.65
+        },
+        {
+            "Model": "Ridge Regression",
+            "Train R2": 0.8723,
+            "Val R2": 0.8738,
+            "Test R2": 0.8333,
+            "Test RMSE (kWh)": 18.261,
+            "Test MAE (kWh)": 10.187,
+            "Test MAPE (%)": 17.73,
+            "Directional Acc (%)": 92.65,
+            "Train Time (s)": 0.1
+        },
+        {
+            "Model": "Persistence Baseline",
+            "Train R2": 0.7014,
+            "Val R2": 0.6988,
+            "Test R2": 0.6252,
+            "Test RMSE (kWh)": 27.384,
+            "Test MAE (kWh)": 13.766,
+            "Test MAPE (%)": 18.71,
+            "Directional Acc (%)": 91.02,
+            "Train Time (s)": 0.0
+        }
+    ],
+    "anomaly_metrics": {
+        "Accuracy": 0.9917,
+        "Precision": 0.9964,
+        "Recall": 0.7202,
+        "F1_Score": 0.8361,
+        "True_Positives": 278,
+        "False_Positives": 1,
+        "False_Negatives": 108
+    },
+    "num_records_total": 87720,
+    "num_test_records": 13160,
+    "feature_count": 43
+}
