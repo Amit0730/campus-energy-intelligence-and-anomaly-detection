@@ -23,7 +23,7 @@ from src.explainability import EnergyExplainer
 # Streamlit Page Config
 st.set_page_config(
     page_title="Campus Energy Intelligence & Anomaly Detection",
-    page_icon="⚡",
+    page_icon="🏢",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -130,7 +130,7 @@ def get_artifacts():
 
 def main():
     # Sidebar
-    st.sidebar.title("⚡ Campus Energy AI")
+    st.sidebar.title("Campus Energy AI")
     st.sidebar.divider()
 
     menu = st.sidebar.radio(
@@ -161,7 +161,7 @@ def main():
     shap_importance_df = artifacts["shap_importance_df"]
 
     # Animated Energy Flow Header
-    st.markdown('<div class="main-header">⚡ Campus Energy Consumption Intelligence & Anomaly Detection</div>', unsafe_allow_html=True)
+    st.markdown('<div class="main-header">Campus Energy Consumption Intelligence & Anomaly Detection</div>', unsafe_allow_html=True)
     st.markdown('<div class="sub-header">AI-driven predictive electricity load forecasting, real-time wastage anomaly detection, and explainable insights across campus facilities.</div>', unsafe_allow_html=True)
     st.markdown('<div class="energy-flow-bar"></div>', unsafe_allow_html=True)
 
@@ -275,7 +275,7 @@ def main():
         b_df = featured_df[featured_df["building_id"] == b_select].copy()
         
         eda_tab1, eda_tab2, eda_tab3, eda_tab4 = st.tabs([
-            "🕒 Diurnal & Weekly Patterns", "🌡️ Weather Correlations", "⚡ Sub-Metering Breakdown", "📅 Calendar Heatmap"
+            "🕒 Diurnal & Weekly Patterns", "🌡️ Weather Correlations", "🔌 Sub-Metering Breakdown", "📅 Calendar Heatmap"
         ])
         
         with eda_tab1:
