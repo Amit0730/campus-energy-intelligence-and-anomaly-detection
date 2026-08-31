@@ -51,6 +51,10 @@ st.markdown("""
         border: 1px solid #E2E8F0;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
+    button[title="View fullscreen"], [data-testid="StyledFullScreenButton"] {
+        display: none !important;
+        visibility: hidden !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -63,7 +67,7 @@ def get_artifacts():
 
 def main():
     # Sidebar
-    st.sidebar.image("https://img.icons8.com/fluency/96/electricity.png", width=70)
+    st.sidebar.markdown("<div style='font-size: 45px; line-height: 1; margin-bottom: 8px;'>⚡</div>", unsafe_allow_html=True)
     st.sidebar.title("Campus Energy AI")
     st.sidebar.divider()
 
