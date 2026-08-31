@@ -290,12 +290,24 @@ def main():
 
         with c_right:
             st.markdown("#### 🎯 Campus Energy Risk Meter")
-            risk_val = min(100, int((total_anomalies / len(test_df)) * 100 * 20))
+            meter_building = st.selectbox("Facility Risk Focus", ["All Campus"] + list(building_profiles.keys()), format_func=lambda x: x.replace("_", " "), key="risk_meter_b")
+            
+            if meter_building == "All Campus":
+                scope_df = test_df
+                scope_title = "Campus Overall Grid Risk"
+            else:
+                scope_df = test_df[test_df["building_id"] == meter_building]
+                scope_title = f"{meter_building.replace('_', ' ')} Risk"
+                
+            b_anoms = int((scope_df["detected_anomaly"] == 1).sum())
+            b_total_records = len(scope_df) if len(scope_df) > 0 else 1
+            risk_val = min(100, max(5, int((b_anoms / b_total_records) * 100 * 18)))
+            
             fig_gauge = go.Figure(go.Indicator(
                 mode="gauge+number+delta",
                 value=risk_val,
-                title={'text': "Campus Grid Risk Index", 'font': {'size': 16, 'color': '#1E3A8A'}},
-                delta={'reference': 50, 'increasing': {'color': "#EF4444"}, 'decreasing': {'color': "#10B981"}},
+                title={'text': scope_title, 'font': {'size': 15, 'color': '#1E3A8A'}},
+                delta={'reference': 45, 'increasing': {'color': "#EF4444"}, 'decreasing': {'color': "#10B981"}},
                 gauge={
                     'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "#475569"},
                     'bar': {'color': "#3B82F6", 'thickness': 0.25},
@@ -314,7 +326,7 @@ def main():
                     }
                 }
             ))
-            fig_gauge.update_layout(height=280, margin=dict(l=20, r=20, t=40, b=20), transition=dict(duration=1000, easing="cubic-out"))
+            fig_gauge.update_layout(height=260, margin=dict(l=20, r=20, t=35, b=20), transition=dict(duration=800, easing="cubic-out"))
             st.plotly_chart(fig_gauge, config={"displayModeBar": False}, width="stretch")
 
         st.markdown("#### 🏛️ Monitored Facilities Health Overview")
