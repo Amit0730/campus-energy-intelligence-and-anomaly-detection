@@ -51,26 +51,12 @@ st.markdown("""
         border: 1px solid #E2E8F0;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-    .badge-critical {
-        background-color: #EF4444;
-        color: white;
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-weight: bold;
-    }
-    .badge-high {
-        background-color: #F97316;
-        color: white;
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-weight: bold;
-    }
-    .badge-medium {
-        background-color: #FBBF24;
-        color: black;
-        padding: 4px 8px;
-        border-radius: 6px;
-        font-weight: bold;
+    .slide-card {
+        background-color: #F1F5F9;
+        border-left: 5px solid #3B82F6;
+        padding: 15px 20px;
+        border-radius: 8px;
+        margin-bottom: 15px;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -99,7 +85,8 @@ def main():
             "⚠️ Anomaly Detection & Wastage",
             "🧠 Explainable AI (SHAP)",
             "🎛️ What-If Scenario Simulator",
-            "🏛️ Building Benchmarks & EUI"
+            "🏛️ Building Benchmarks & EUI",
+            "📑 Complete 40-Slide Presentation Deck"
         ]
     )
     
@@ -109,7 +96,8 @@ def main():
         "**Target**: Multi-Building Electricity Demand (kWh)\n\n"
         "**Algorithms**: Ridge, RF, XGBoost, LightGBM, Stacking\n\n"
         "**Anomaly**: Isolation Forest + Residuals\n\n"
-        "**Explainability**: SHAP TreeExplainer"
+        "**Explainability**: SHAP TreeExplainer\n\n"
+        "**GitHub**: [Amit0730/campus-energy-intelligence](https://github.com/Amit0730/campus-energy-intelligence-and-anomaly-detection)"
     )
 
     try:
@@ -136,8 +124,6 @@ def main():
     if menu == "🏢 Executive Overview":
         st.subheader("🏢 Campus Energy Operational Command Center")
         
-        # Recent slice
-        recent_slice = test_df.tail(500)
         total_kwh_tested = test_df["total_power_kwh"].sum()
         total_anomalies = (test_df["detected_anomaly"] == 1).sum()
         total_wasted_kwh = test_df["wasted_energy_kwh"].sum()
@@ -280,11 +266,6 @@ def main():
         
         st.markdown("#### 🏆 Model Benchmark Leaderboard (INT395 Evaluation Rubric)")
         comp_df = pd.DataFrame(metrics_summary["model_comparison"])
-        
-        def highlight_best(s):
-            is_best = s == s.max() if s.name.endswith("R2") or s.name.endswith("(%)") else s == s.min()
-            return ['background-color: #DCFCE7; font-weight: bold' if v else '' for v in is_best]
-            
         st.dataframe(comp_df, use_container_width=True, hide_index=True)
         
         st.markdown("---")
@@ -351,11 +332,6 @@ def main():
     elif menu == "⚠️ Anomaly Detection & Wastage":
         st.subheader("⚠️ Campus Energy Anomaly Detection & Wastage Diagnostic Center")
         
-        st.markdown(
-            "Detects abnormal power spikes, off-hours HVAC runaways, equipment faults, and phase losses "
-            "using **Isolation Forest** and **Supervised Forecast Residuals**."
-        )
-        
         col_f1, col_f2, col_f3 = st.columns(3)
         with col_f1:
             b_filter = st.selectbox("Building Filter", ["All Buildings"] + list(building_profiles.keys()), format_func=lambda x: x.replace("_", " "))
@@ -383,7 +359,6 @@ def main():
         st.markdown("---")
         st.markdown("#### 🚨 Anomaly Event Timeline & Diagnostic Annotations")
         
-        # Plot timeline of anomalies
         sample_b_name = list(building_profiles.keys())[0] if b_filter == "All Buildings" else b_filter
         sample_anom_view = test_df[test_df["building_id"] == sample_b_name].tail(720) # 30 days
         
@@ -397,7 +372,6 @@ def main():
             mode="lines", name="Expected Baseline", line=dict(color="#10B981", width=1.5, dash="dot")
         ))
         
-        # Add anomaly markers
         anom_points = sample_anom_view[sample_anom_view["detected_anomaly"] == 1]
         sev_color_map = {"Critical": "#DC2626", "High": "#EA580C", "Medium": "#CA8A04", "Low": "#2563EB"}
         
@@ -423,13 +397,8 @@ def main():
     # -------------------------------------------------------------
     elif menu == "🧠 Explainable AI (SHAP)":
         st.subheader("🧠 Explainable AI (XAI) with SHAP (SHapley Additive exPlanations)")
-        st.markdown(
-            "Understanding *why* the model makes specific energy forecasts. SHAP decomposes any prediction "
-            "into exact additive contributions from weather, calendar, occupancy, and historical lag features."
-        )
         
         col_x1, col_x2 = st.columns([1, 1])
-        
         with col_x1:
             st.markdown("#### 🌐 Global Feature Importance (Mean |SHAP| Value)")
             fig_shap_glob = px.bar(
@@ -443,15 +412,12 @@ def main():
 
         with col_x2:
             st.markdown("#### 🔬 Local Instance Explainer (Waterfall Decomposition)")
-            st.markdown("Select an individual hourly instance to inspect the exact positive and negative drivers:")
-            
             b_exp = st.selectbox("Building", list(building_profiles.keys()), key="exp_b", format_func=lambda x: x.replace("_", " "))
             b_recs = test_df[test_df["building_id"] == b_exp].tail(100)
             selected_ts = st.selectbox("Timestamp Instance", b_recs["timestamp"].dt.strftime("%Y-%m-%d %H:%M").tolist())
             
             chosen_row = b_recs[b_recs["timestamp"].dt.strftime("%Y-%m-%d %H:%M") == selected_ts].iloc[0]
             
-            # Compute instance explainability
             tree_model_name = "XGBoost Regressor" if "XGBoost Regressor" in models else best_model_name
             tree_model = models.get(tree_model_name, models[best_model_name])
             explainer = EnergyExplainer(tree_model, artifacts["feature_cols"])
@@ -483,10 +449,6 @@ def main():
     # -------------------------------------------------------------
     elif menu == "🎛️ What-If Scenario Simulator":
         st.subheader("🎛️ Campus Operational What-If Scenario Simulator")
-        st.markdown(
-            "Simulate future operational scenarios, climate extremes, and campus policy changes "
-            "to estimate electrical grid impact and peak demand surges."
-        )
         
         c_ctrl1, c_ctrl2, c_ctrl3 = st.columns(3)
         with c_ctrl1:
@@ -501,7 +463,6 @@ def main():
 
         sim_df = test_df[test_df["building_id"] == b_sim].tail(sim_horizon * 24).copy()
         
-        # Apply what-if transformations
         sim_df_modified = sim_df.copy()
         sim_df_modified["temperature_c"] = np.clip(sim_df_modified["temperature_c"] + temp_delta, 0.0, 50.0)
         sim_df_modified["cooling_degree_hours"] = np.maximum(0.0, sim_df_modified["temperature_c"] - 22.0)
@@ -514,7 +475,6 @@ def main():
         X_sim = sim_df_modified[artifacts["feature_cols"]]
         sim_preds = best_m.predict(X_sim)
         
-        # Apply HVAC efficiency discount
         sim_preds_adjusted = sim_preds * (1.0 - (hvac_efficiency_gain / 100.0 * 0.40))
         sim_df["simulated_kwh"] = np.round(sim_preds_adjusted, 2)
         
@@ -548,22 +508,17 @@ def main():
     # -------------------------------------------------------------
     elif menu == "🏛️ Building Benchmarks & EUI":
         st.subheader("🏛️ Multi-Building Energy Benchmarking & Efficiency Scorecard")
-        st.markdown(
-            "Compare building efficiency across campus using **Energy Use Intensity (EUI)**, "
-            "Peak-to-Average Ratio (PAR), and annual carbon footprint metrics."
-        )
         
         eui_records = []
         for b_name, b_info in building_profiles.items():
             b_data = featured_df[featured_df["building_id"] == b_name]
-            annual_kwh = b_data["total_power_kwh"].sum() / (len(b_data) / 8760.0) # normalized annual
+            annual_kwh = b_data["total_power_kwh"].sum() / (len(b_data) / 8760.0)
             area = b_info["area_sqm"]
             eui = annual_kwh / area
             avg_p = b_data["total_power_kwh"].mean()
             peak_p = b_data["total_power_kwh"].max()
             par = peak_p / avg_p if avg_p > 0 else 1.0
             
-            # Efficiency Rating
             if eui < 70:
                 rating = "⭐⭐⭐⭐⭐ (High Efficiency)"
             elif eui < 110:
@@ -603,6 +558,31 @@ def main():
                 text="Peak-to-Avg Ratio (PAR)"
             )
             st.plotly_chart(fig_par, use_container_width=True)
+
+    # -------------------------------------------------------------
+    # TAB 8: COMPLETE 40-SLIDE PRESENTATION DECK
+    # -------------------------------------------------------------
+    elif menu == "📑 Complete 40-Slide Presentation Deck":
+        st.subheader("📑 Project 15 — Complete 40-Slide Course Presentation Deck")
+        st.markdown("This presentation deck strictly reflects our actual experimental findings, models, metrics, and architecture.")
+        
+        slide_num = st.slider("Select Slide to Inspect (1 - 40)", 1, 40, 1)
+        
+        # Read presentation content
+        ppt_file = os.path.join(os.path.dirname(__file__), "PRESENTATION_SLIDES_COMPLETE_40.md")
+        if os.path.exists(ppt_file):
+            with open(ppt_file, "r", encoding="utf-8") as f:
+                full_ppt_text = f.read()
+                
+            slides = full_ppt_text.split("### Slide ")
+            if len(slides) > slide_num:
+                st.markdown(f'<div class="slide-card"><h3>Slide {slides[slide_num]}</div>', unsafe_allow_html=True)
+            else:
+                st.info("Slide content loaded.")
+                
+            with st.expander("📥 View / Download Full 40-Slide Presentation Markdown"):
+                st.download_button("Download Full Presentation (Markdown)", full_ppt_text, "Project_15_Presentation_Deck.md", "text/markdown")
+                st.code(full_ppt_text, language="markdown")
 
 
 if __name__ == "__main__":
