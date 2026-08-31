@@ -89,7 +89,7 @@ def main():
         "**Algorithms**: Ridge, RF, XGBoost, LightGBM, Stacking\n\n"
         "**Anomaly**: Isolation Forest + Residuals\n\n"
         "**Explainability**: SHAP TreeExplainer\n\n"
-        "**GitHub**: [Amit0730/campus-energy-intelligence](https://github.com/Amit0730/campus-energy-intelligence-and-anomaly-detection)"
+        "**Status**: Deployed & Active"
     )
 
     try:
