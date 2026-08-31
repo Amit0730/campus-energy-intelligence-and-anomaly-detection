@@ -2,6 +2,12 @@
 ### INT395: Supervised Learning — Comprehensive Course Project (Project 15)
 **Total Evaluation Marks**: 35 Marks | **Team Size**: 3 Students
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://campus-energy-intelligence.streamlit.app)
+[![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-blue?logo=github)](https://github.com/Amit0730/campus-energy-intelligence-and-anomaly-detection)
+
+> 🚀 **Live Web Application**: **[https://campus-energy-intelligence.streamlit.app](https://campus-energy-intelligence.streamlit.app)**  
+> 📊 **Evaluation Benchmark**: XGBoost $R^2 = 0.8855$, $95.10\%$ Directional Accuracy, $99.64\%$ Anomaly Precision
+
 ---
 
 ## 📌 1. Project Overview & Problem Definition
