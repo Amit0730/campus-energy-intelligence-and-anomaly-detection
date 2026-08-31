@@ -51,12 +51,14 @@ st.markdown("""
         border: 1px solid #E2E8F0;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-    #MainMenu {visibility: hidden; display: none !important;}
-    footer {visibility: hidden; display: none !important;}
-    header {visibility: hidden; display: none !important;}
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
     [data-testid="stToolbar"] {visibility: hidden; display: none !important;}
     [data-testid="stDecoration"] {visibility: hidden; display: none !important;}
-    [data-testid="stHeader"] {visibility: hidden; display: none !important;}
+    [data-testid="stSidebarCollapsedControl"] {
+        display: block !important;
+        visibility: visible !important;
+    }
 </style>
 """, unsafe_allow_html=True)
 
