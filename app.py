@@ -1,7 +1,6 @@
 """
-Campus Energy Consumption Intelligence & Anomaly Detection
-Streamlit Interactive Dashboard Deployment (Project 15)
-With Smooth Energy-Flow Animations & Interactive Transitions
+Campus Energy Intelligence
+Interactive Streamlit Dashboard
 """
 
 import streamlit as st
@@ -14,13 +13,13 @@ import json
 import os
 import sys
 
-# Ensure root is in path
+# root code
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from src.pipeline import load_pipeline_artifacts
 from src.explainability import EnergyExplainer
 
-# Streamlit Page Config
+# page config
 st.set_page_config(
     page_title="Campus Energy Intelligence & Anomaly Detection",
     page_icon="🏢",
@@ -28,10 +27,10 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Custom CSS styling with animations
+# css styling and animations
 st.markdown("""
 <style>
-    /* 1. Page Transition Animations (Fade & Slide in) */
+    /* page transition */
     @keyframes pageSlideFade {
         0% { opacity: 0; transform: translateY(12px); }
         100% { opacity: 1; transform: translateY(0); }
@@ -40,7 +39,7 @@ st.markdown("""
         animation: pageSlideFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     }
     
-    /* 2. Energy-Flow Power Pulse Animation for Header Banner */
+    /* header energy flow animation */
     @keyframes energyFlow {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
@@ -71,7 +70,7 @@ st.markdown("""
         margin-bottom: 1.2rem;
     }
     
-    /* 3. KPI Animated Cards with Hover Elevation & Pulse */
+    /* kpi cards */
     .metric-card {
         background: #F8FAFC;
         border-radius: 12px;
@@ -88,7 +87,7 @@ st.markdown("""
         border-color: #3B82F6;
     }
     
-    /* 4. Pulsing Radar Animation for Anomalies */
+    /* anomaly alerts */
     @keyframes pulseRing {
         0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
         70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
@@ -114,6 +113,7 @@ st.markdown("""
         font-size: 0.85rem;
     }
     
+    /* hide chart modebars and menus */
     button[title="View fullscreen"], [data-testid="StyledFullScreenButton"] {
         display: none !important;
         visibility: hidden !important;
@@ -123,7 +123,7 @@ st.markdown("""
         visibility: hidden !important;
     }
     
-    /* 5. Typewriter Cursor Blink */
+    /* typewriter cursor */
     @keyframes cursorBlink {
         0%, 100% { opacity: 1; }
         50% { opacity: 0; }
@@ -141,12 +141,12 @@ st.markdown("""
 
 @st.cache_resource
 def get_artifacts():
-    """Loads and caches all pipeline artifacts."""
+    # load saved pipeline artifacts
     return load_pipeline_artifacts(data_dir="data", model_dir="saved_models")
 
 
 def main():
-    # Sidebar
+    # sidebar
     st.sidebar.markdown("""
     <div style="font-size: 1.55rem; font-weight: 800; background: linear-gradient(90deg, #2563EB, #06B6D4, #10B981, #3B82F6); background-size: 300% 300%; animation: energyFlow 6s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px;">
     Campus Energy Intelligence
@@ -170,7 +170,7 @@ def main():
     try:
         artifacts = get_artifacts()
     except Exception as e:
-        st.error(f"⚠️ Artifacts not found or pipeline not yet executed. Please run `python train.py` first.\n\nError: {e}")
+        st.error(f"Artifacts not found. Please run train.py first.\n\nError: {e}")
         return
 
     featured_df = artifacts["featured_df"]
@@ -181,7 +181,7 @@ def main():
     building_profiles = artifacts["building_profiles"]
     shap_importance_df = artifacts["shap_importance_df"]
 
-    # Animated Shimmer Header + Typewriter Typing & Deleting Loop
+    # main header with typewriter loop
     st.markdown("""
     <div style="margin-bottom: 4px;">
         <span style="font-size: 2.3rem; font-weight: 800; background: linear-gradient(90deg, #2563EB, #3B82F6, #06B6D4, #10B981, #60A5FA, #2563EB); background-size: 300% 300%; animation: energyFlow 6s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
@@ -238,9 +238,7 @@ def main():
     </script>
     """, unsafe_allow_html=True)
 
-    # -------------------------------------------------------------
-    # TAB 1: EXECUTIVE OVERVIEW
-    # -------------------------------------------------------------
+    # overview tab
     if menu == "🏢 Executive Overview":
         st.subheader("🏢 Campus Energy Operational Command Center")
         
@@ -249,7 +247,6 @@ def main():
         total_wasted_cost = float(test_df["financial_loss_inr"].sum())
         total_excess_co2 = float(test_df["excess_co2_kg"].sum())
 
-        # Animated KPI Cards
         col1, col2, col3, col4, col5 = st.columns(5)
         with col1:
             st.metric("Total Monitored Hours", f"{len(test_df):,} hrs", "5 Campus Buildings")
@@ -293,7 +290,6 @@ def main():
 
         with c_right:
             st.markdown("#### 🎯 Campus Energy Risk Meter")
-            # Animated Risk Gauge
             risk_val = min(100, int((total_anomalies / len(test_df)) * 100 * 20))
             fig_gauge = go.Figure(go.Indicator(
                 mode="gauge+number+delta",
@@ -338,9 +334,7 @@ def main():
             })
         st.dataframe(pd.DataFrame(b_summary), width="stretch", hide_index=True)
 
-    # -------------------------------------------------------------
-    # TAB 2: EXPLORATORY DATA ANALYSIS
-    # -------------------------------------------------------------
+    # eda tab
     elif menu == "📊 Exploratory Data Analysis":
         st.subheader("📊 Campus Energy Consumption & Weather EDA")
         
@@ -416,18 +410,16 @@ def main():
             fig_heat = px.imshow(pivot_table, labels=dict(x="Hour of Day", y="Day of Week", color="Avg kWh"), color_continuous_scale="Turbo")
             st.plotly_chart(fig_heat, config={"displayModeBar": False}, width="stretch")
 
-    # -------------------------------------------------------------
-    # TAB 3: DEMAND FORECASTING & MODEL COMPARISON
-    # -------------------------------------------------------------
+    # forecasting tab
     elif menu == "🔮 Demand Forecasting & Models":
         st.subheader("🔮 Supervised Energy Forecasting & Model Comparative Benchmark")
         
-        st.markdown("#### 🏆 Model Benchmark Leaderboard (INT395 Evaluation Rubric)")
+        st.markdown("#### 🏆 Model Benchmark Leaderboard")
         comp_df = pd.DataFrame(metrics_summary["model_comparison"])
         st.dataframe(comp_df, width="stretch", hide_index=True)
         
         st.markdown("---")
-        st.markdown("#### 🔬 Interactive Time-Series Forecasting & Animated Line Inspection")
+        st.markdown("#### 🔬 Interactive Time-Series Forecasting")
         
         c_b, c_m, c_days = st.columns([1.5, 1.5, 1])
         with c_b:
@@ -446,7 +438,6 @@ def main():
         
         slice_b = b_test.tail(forecast_window * 24)
         
-        # Animated progressive forecast curve
         fig_fore = go.Figure()
         fig_fore.add_trace(go.Scatter(
             x=slice_b["timestamp"], y=slice_b["total_power_kwh"],
@@ -464,7 +455,7 @@ def main():
         )
         st.plotly_chart(fig_fore, config={"displayModeBar": False}, width="stretch")
         
-        # Residual Error Analysis
+        # residual diagnostics
         residuals = slice_b["total_power_kwh"] - slice_b["chosen_forecast_kwh"]
         col_r1, col_r2 = st.columns(2)
         with col_r1:
@@ -486,9 +477,7 @@ def main():
             fig_qq.update_layout(transition=dict(duration=800))
             st.plotly_chart(fig_qq, config={"displayModeBar": False}, width="stretch")
 
-    # -------------------------------------------------------------
-    # TAB 4: ANOMALY DETECTION & WASTAGE ALERT CENTER
-    # -------------------------------------------------------------
+    # anomaly detection tab
     elif menu == "⚠️ Anomaly Detection & Wastage":
         st.subheader("⚠️ Campus Energy Anomaly Detection & Wastage Diagnostic Center")
         
@@ -517,7 +506,7 @@ def main():
         col_m4.metric("Financial Loss (₹)", f"₹ {anom_data['financial_loss_inr'].sum():,.0f}")
         
         st.markdown("---")
-        st.markdown("#### 🚨 Anomaly Event Timeline & Glowing Diagnostic Markers")
+        st.markdown("#### 🚨 Anomaly Event Timeline")
         
         sample_b_name = list(building_profiles.keys())[0] if b_filter == "All Buildings" else b_filter
         sample_anom_view = test_df[test_df["building_id"] == sample_b_name].tail(720)
@@ -532,7 +521,6 @@ def main():
             mode="lines", name="Expected Baseline", line=dict(color="#10B981", width=1.5, dash="dot")
         ))
         
-        # High-visibility pulsing markers
         anom_points = sample_anom_view[sample_anom_view["detected_anomaly"] == 1]
         sev_color_map = {"Critical": "#DC2626", "High": "#EA580C", "Medium": "#CA8A04", "Low": "#2563EB"}
         
@@ -544,7 +532,7 @@ def main():
             ))
             
         fig_anom.update_layout(
-            title=f"Pulsing Anomaly Events on {sample_b_name.replace('_', ' ')} (Past 30 Days)",
+            title=f"Anomaly Events on {sample_b_name.replace('_', ' ')} (Past 30 Days)",
             xaxis_title="Date", yaxis_title="Power (kWh)", height=400,
             transition=dict(duration=800, easing="cubic-in-out")
         )
@@ -554,15 +542,13 @@ def main():
         display_cols = ["timestamp", "building_id", "detected_severity", "total_power_kwh", "forecast_kwh", "wasted_energy_kwh", "financial_loss_inr", "root_cause", "recommended_action"]
         st.dataframe(anom_data[display_cols].sort_values("timestamp", ascending=False).head(50), width="stretch", hide_index=True)
 
-    # -------------------------------------------------------------
-    # TAB 5: EXPLAINABLE AI (SHAP)
-    # -------------------------------------------------------------
+    # explainability tab
     elif menu == "🧠 Explainable AI (SHAP)":
-        st.subheader("🧠 Explainable AI (XAI) with SHAP (SHapley Additive exPlanations)")
+        st.subheader("🧠 Explainable AI (XAI) with SHAP")
         
         col_x1, col_x2 = st.columns([1, 1])
         with col_x1:
-            st.markdown("#### 🌐 Global Feature Importance (Mean |SHAP| Value)")
+            st.markdown("#### 🌐 Global Feature Importance")
             fig_shap_glob = px.bar(
                 shap_importance_df.head(15),
                 x="Mean_Abs_SHAP", y="Feature", orientation="h",
@@ -573,7 +559,7 @@ def main():
             st.plotly_chart(fig_shap_glob, config={"displayModeBar": False}, width="stretch")
 
         with col_x2:
-            st.markdown("#### 🔬 Local Instance Explainer (Waterfall Decomposition)")
+            st.markdown("#### 🔬 Local Instance Explainer")
             b_exp = st.selectbox("Building", list(building_profiles.keys()), key="exp_b", format_func=lambda x: x.replace("_", " "))
             b_recs = test_df[test_df["building_id"] == b_exp].tail(100)
             selected_ts = st.selectbox("Timestamp Instance", b_recs["timestamp"].dt.strftime("%Y-%m-%d %H:%M").tolist())
@@ -607,9 +593,7 @@ def main():
             )
             st.plotly_chart(fig_waterfall, config={"displayModeBar": False}, width="stretch")
 
-    # -------------------------------------------------------------
-    # TAB 6: WHAT-IF SCENARIO SIMULATOR
-    # -------------------------------------------------------------
+    # simulator tab
     elif menu == "🎛️ What-If Scenario Simulator":
         st.subheader("🎛️ Campus Operational What-If Scenario Simulator")
         
@@ -618,8 +602,8 @@ def main():
             b_sim = st.selectbox("Simulation Target Building", list(building_profiles.keys()), format_func=lambda x: x.replace("_", " "))
             sim_horizon = st.slider("Simulation Horizon (Days)", 3, 14, 7)
         with c_ctrl2:
-            temp_delta = st.slider("🌡️ Outdoor Temp Delta (°C) [Heatwave / Cold Snap]", -8.0, 10.0, 3.5, step=0.5)
-            occupancy_multiplier = st.slider("👥 Occupancy Scaling Factor (Exam vs Vacation)", 0.2, 2.0, 1.25, step=0.05)
+            temp_delta = st.slider("🌡️ Outdoor Temp Delta (°C)", -8.0, 10.0, 3.5, step=0.5)
+            occupancy_multiplier = st.slider("👥 Occupancy Scaling Factor", 0.2, 2.0, 1.25, step=0.05)
         with c_ctrl3:
             hvac_efficiency_gain = st.slider("❄️ HVAC Efficiency Improvement (%)", 0, 40, 10, step=5)
             exam_mode = st.checkbox("Toggle Campus Final Exam Week Active", value=True)
@@ -651,7 +635,6 @@ def main():
         col_s3.metric("Simulated Peak Load", f"{sim_df['simulated_kwh'].max():.1f} kWh", f"{sim_df['simulated_kwh'].max() - sim_df['forecast_kwh'].max():+.1f} kWh")
         col_s4.metric("Cost Differential", f"₹ {(sim_total - baseline_total)*8.5:,.0f}", "Tariff Impact")
 
-        # Animated transition chart for simulator
         fig_sim = go.Figure()
         fig_sim.add_trace(go.Scatter(
             x=sim_df["timestamp"], y=sim_df["forecast_kwh"],
@@ -670,9 +653,7 @@ def main():
         )
         st.plotly_chart(fig_sim, config={"displayModeBar": False}, width="stretch")
 
-    # -------------------------------------------------------------
-    # TAB 7: BUILDING BENCHMARKING & EUI
-    # -------------------------------------------------------------
+    # benchmarking tab
     elif menu == "🏛️ Building Benchmarks & EUI":
         st.subheader("🏛️ Multi-Building Energy Benchmarking & Efficiency Scorecard")
         
@@ -714,7 +695,7 @@ def main():
         with col_b1:
             fig_eui = px.bar(
                 eui_df, x="Building Name", y="EUI (kWh/m²/yr)", color="Type",
-                title="Animated Energy Use Intensity Comparison (kWh / m² / year)",
+                title="Energy Use Intensity Comparison (kWh / m² / year)",
                 text="EUI (kWh/m²/yr)"
             )
             fig_eui.update_layout(transition=dict(duration=1000, easing="cubic-out"))
@@ -722,7 +703,7 @@ def main():
         with col_b2:
             fig_par = px.bar(
                 eui_df, x="Building Name", y="Peak-to-Avg Ratio (PAR)", color="Type",
-                title="Animated Peak-to-Average Ratio (Grid Stress Metric)",
+                title="Peak-to-Average Ratio (Grid Stress Metric)",
                 text="Peak-to-Avg Ratio (PAR)"
             )
             fig_par.update_layout(transition=dict(duration=1000, easing="cubic-out"))
