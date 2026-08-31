@@ -118,6 +118,19 @@ st.markdown("""
         display: none !important;
         visibility: hidden !important;
     }
+    
+    /* 5. Typewriter Cursor Blink */
+    @keyframes cursorBlink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0; }
+    }
+    .tw-cursor {
+        font-weight: 900;
+        color: #2563EB;
+        font-size: 1.25rem;
+        animation: cursorBlink 0.75s infinite;
+        margin-left: 2px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -130,7 +143,11 @@ def get_artifacts():
 
 def main():
     # Sidebar
-    st.sidebar.title("Campus Energy AI")
+    st.sidebar.markdown("""
+    <div style="font-size: 1.55rem; font-weight: 800; background: linear-gradient(90deg, #2563EB, #06B6D4, #10B981, #3B82F6); background-size: 300% 300%; animation: energyFlow 6s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px;">
+    Campus Energy Intelligence
+    </div>
+    """, unsafe_allow_html=True)
     st.sidebar.divider()
 
     menu = st.sidebar.radio(
@@ -160,10 +177,62 @@ def main():
     building_profiles = artifacts["building_profiles"]
     shap_importance_df = artifacts["shap_importance_df"]
 
-    # Animated Energy Flow Header
-    st.markdown('<div class="main-header">Campus Energy Consumption Intelligence & Anomaly Detection</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sub-header">AI-driven predictive electricity load forecasting, real-time wastage anomaly detection, and explainable insights across campus facilities.</div>', unsafe_allow_html=True)
-    st.markdown('<div class="energy-flow-bar"></div>', unsafe_allow_html=True)
+    # Animated Shimmer Header + Typewriter Typing & Deleting Loop
+    st.markdown("""
+    <div style="margin-bottom: 4px;">
+        <span style="font-size: 2.3rem; font-weight: 800; background: linear-gradient(90deg, #2563EB, #3B82F6, #06B6D4, #10B981, #60A5FA, #2563EB); background-size: 300% 300%; animation: energyFlow 6s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
+            Campus Energy Intelligence
+        </span>
+    </div>
+    <div style="font-size: 1.12rem; font-weight: 600; color: #64748B; margin-bottom: 12px; min-height: 30px;">
+        <span>Automated Platform for </span>
+        <span id="tw-text" style="background: linear-gradient(90deg, #2563EB, #06B6D4, #10B981, #3B82F6); background-size: 200% 200%; animation: energyFlow 5s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;"></span><span class="tw-cursor">|</span>
+    </div>
+    <div class="energy-flow-bar"></div>
+
+    <script>
+    (function() {
+        const phrases = [
+            "Multi-Building Load Forecasting.",
+            "Real-Time Anomaly & Wastage Detection.",
+            "Energy Risk Scoring & Diagnostics.",
+            "Explainable AI (SHAP) Model Insights.",
+            "Operational What-If Scenario Simulations."
+        ];
+        let pIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        
+        function typeLoop() {
+            const targetEl = document.getElementById("tw-text");
+            if (!targetEl) return;
+            const currentPhrase = phrases[pIndex];
+            
+            if (isDeleting) {
+                targetEl.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                targetEl.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+            
+            let typeSpeed = isDeleting ? 30 : 65;
+            
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                typeSpeed = 1800;
+                isDeleting = true;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                pIndex = (pIndex + 1) % phrases.length;
+                typeSpeed = 450;
+            }
+            
+            setTimeout(typeLoop, typeSpeed);
+        }
+        setTimeout(typeLoop, 300);
+    })();
+    </script>
+    """, unsafe_allow_html=True)
 
     # -------------------------------------------------------------
     # TAB 1: EXECUTIVE OVERVIEW
