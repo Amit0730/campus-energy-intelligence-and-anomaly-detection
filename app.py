@@ -51,13 +51,6 @@ st.markdown("""
         border: 1px solid #E2E8F0;
         box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-    .slide-card {
-        background-color: #F1F5F9;
-        border-left: 5px solid #3B82F6;
-        padding: 15px 20px;
-        border-radius: 8px;
-        margin-bottom: 15px;
-    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -85,8 +78,7 @@ def main():
             "⚠️ Anomaly Detection & Wastage",
             "🧠 Explainable AI (SHAP)",
             "🎛️ What-If Scenario Simulator",
-            "🏛️ Building Benchmarks & EUI",
-            "📑 Complete 40-Slide Presentation Deck"
+            "🏛️ Building Benchmarks & EUI"
         ]
     )
     
@@ -558,31 +550,6 @@ def main():
                 text="Peak-to-Avg Ratio (PAR)"
             )
             st.plotly_chart(fig_par, use_container_width=True)
-
-    # -------------------------------------------------------------
-    # TAB 8: COMPLETE 40-SLIDE PRESENTATION DECK
-    # -------------------------------------------------------------
-    elif menu == "📑 Complete 40-Slide Presentation Deck":
-        st.subheader("📑 Project 15 — Complete 40-Slide Course Presentation Deck")
-        st.markdown("This presentation deck strictly reflects our actual experimental findings, models, metrics, and architecture.")
-        
-        slide_num = st.slider("Select Slide to Inspect (1 - 40)", 1, 40, 1)
-        
-        # Read presentation content
-        ppt_file = os.path.join(os.path.dirname(__file__), "PRESENTATION_SLIDES_COMPLETE_40.md")
-        if os.path.exists(ppt_file):
-            with open(ppt_file, "r", encoding="utf-8") as f:
-                full_ppt_text = f.read()
-                
-            slides = full_ppt_text.split("### Slide ")
-            if len(slides) > slide_num:
-                st.markdown(f'<div class="slide-card"><h3>Slide {slides[slide_num]}</div>', unsafe_allow_html=True)
-            else:
-                st.info("Slide content loaded.")
-                
-            with st.expander("📥 View / Download Full 40-Slide Presentation Markdown"):
-                st.download_button("Download Full Presentation (Markdown)", full_ppt_text, "Project_15_Presentation_Deck.md", "text/markdown")
-                st.code(full_ppt_text, language="markdown")
 
 
 if __name__ == "__main__":
