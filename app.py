@@ -67,8 +67,7 @@ def get_artifacts():
 
 def main():
     # Sidebar
-    st.sidebar.markdown("<div style='font-size: 45px; line-height: 1; margin-bottom: 8px;'>⚡</div>", unsafe_allow_html=True)
-    st.sidebar.title("Campus Energy AI")
+    st.sidebar.title("⚡ Campus Energy AI")
     st.sidebar.divider()
 
     menu = st.sidebar.radio(
