@@ -28,7 +28,8 @@ Thumbs.db
 .ipynb_checkpoints/
 
 # Streamlit config
-.streamlit/
+.streamlit/*
+!.streamlit/config.toml
 
 # Local folders for Report & Viva (kept locally)
 Report/

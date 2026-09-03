@@ -45,19 +45,11 @@ st.markdown("""
         50% { background-position: 100% 50%; }
         100% { background-position: 0% 50%; }
     }
-    .energy-flow-bar {
-        height: 4px;
-        background: linear-gradient(90deg, #1E3A8A, #3B82F6, #10B981, #3B82F6, #1E3A8A);
-        background-size: 300% 300%;
-        animation: energyFlow 4s ease infinite;
-        border-radius: 2px;
-        margin-bottom: 20px;
-    }
 
     .main-header {
         font-size: 2.2rem;
         font-weight: 800;
-        background: linear-gradient(90deg, #1E3A8A, #3B82F6, #10B981, #3B82F6);
+        background: linear-gradient(90deg, #065F46, #059669, #10B981, #047857);
         background-size: 300% 300%;
         animation: energyFlow 8s ease infinite;
         -webkit-background-clip: text;
@@ -65,26 +57,26 @@ st.markdown("""
         margin-bottom: 0.2rem;
     }
     .sub-header {
-        color: #64748B;
+        color: #4B5563;
         font-size: 1.05rem;
         margin-bottom: 1.2rem;
     }
     
-    /* kpi cards */
+    /* kpi cards (clean white and green styling) */
     .metric-card {
-        background: #F8FAFC;
+        background: #FFFFFF;
         border-radius: 12px;
         padding: 20px;
         border: 1px solid #E2E8F0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         position: relative;
         overflow: hidden;
     }
     .metric-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 24px -6px rgba(59, 130, 246, 0.2);
-        border-color: #3B82F6;
+        box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.25);
+        border-color: #10B981;
     }
     
     /* anomaly alerts */
@@ -122,18 +114,107 @@ st.markdown("""
         display: none !important;
         visibility: hidden !important;
     }
+
+    /* hide header anchor links / chain icons */
+    [data-testid="stHeaderActionElements"],
+    .stHeading [data-testid="stHeaderActionElements"],
+    [data-testid="stHeading"] a,
+    .stHeading a,
+    a.anchorjs-link,
+    .anchorjs-link {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+    }
     
-    /* typewriter cursor */
+    /* typewriter cursor (emerald green) */
     @keyframes cursorBlink {
         0%, 100% { opacity: 1; }
         50% { opacity: 0; }
     }
     .tw-cursor {
         font-weight: 900;
-        color: #2563EB;
+        color: #059669;
         font-size: 1.25rem;
         animation: cursorBlink 0.75s infinite;
         margin-left: 2px;
+    }
+
+    /* =========================================================
+       PERMANENT SPLIT SCREEN LAYOUT & SIDEBAR LOCK (WHITE & GREEN THEME)
+       - Removes the '<' / '<<' collapse and expand toggle buttons
+       - Keeps the sidebar permanently fixed and visible on the left
+       - Maintains consistent width and length (split-screen layout)
+       - Clean mint-green sidebar background with crisp emerald border
+       ========================================================= */
+
+    /* Hide sidebar collapse (< / <<) and expand (> / >>) toggle buttons */
+    [data-testid="stSidebarCollapseButton"],
+    [data-testid="stExpandSidebarButton"],
+    [data-testid="collapsedControl"],
+    button[aria-label="Close sidebar"],
+    button[aria-label="Open sidebar"],
+    button[title="Close sidebar"],
+    button[title="Open sidebar"] {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        opacity: 0 !important;
+        width: 0 !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* Lock the sidebar permanently in place with NO split line or dividing border */
+    section[data-testid="stSidebar"] {
+        min-width: 320px !important;
+        max-width: 330px !important;
+        width: 325px !important;
+        transform: none !important;
+        visibility: visible !important;
+        display: flex !important;
+        flex-direction: column !important;
+        flex-shrink: 0 !important;
+        background-color: #F0FDF4 !important;
+        border-right: none !important;
+        border: none !important;
+        box-shadow: none !important;
+        outline: none !important;
+        transition: none !important;
+    }
+
+    /* Completely eliminate any divider lines, pseudo-element borders, or resizer lines */
+    section[data-testid="stSidebar"]::after,
+    section[data-testid="stSidebar"]::before,
+    [data-testid="stSidebarResizer"],
+    section[data-testid="stSidebar"] [data-testid="stSidebarResizer"],
+    section[data-testid="stSidebar"] div[style*="cursor: col-resize"],
+    section[data-testid="stSidebar"] div[style*="cursor: ew-resize"],
+    section[data-testid="stSidebar"] > div:last-child {
+        display: none !important;
+        border: none !important;
+        border-right: none !important;
+        border-left: none !important;
+        box-shadow: none !important;
+        background: transparent !important;
+        pointer-events: none !important;
+    }
+
+    /* Ensure parent app container has no split border */
+    div[data-testid="stAppViewContainer"] > section:first-child {
+        border-right: none !important;
+        box-shadow: none !important;
+    }
+
+    /* Clean up sidebar header spacing where the collapse button used to reside */
+    [data-testid="stSidebarHeader"] {
+        padding-top: 0.75rem !important;
+        padding-bottom: 0.25rem !important;
+        background-color: transparent !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -148,7 +229,7 @@ def get_artifacts():
 def main():
     # sidebar
     st.sidebar.markdown("""
-    <div style="font-size: 1.55rem; font-weight: 800; background: linear-gradient(90deg, #2563EB, #06B6D4, #10B981, #3B82F6); background-size: 300% 300%; animation: energyFlow 6s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px;">
+    <div style="font-size: 1.55rem; font-weight: 800; background: linear-gradient(90deg, #065F46, #059669, #10B981, #047857); background-size: 300% 300%; animation: energyFlow 6s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px;">
     Campus Energy Intelligence
     </div>
     """, unsafe_allow_html=True)
@@ -157,14 +238,14 @@ def main():
     menu = st.sidebar.radio(
         "Navigation Modules",
         [
-            "🏢 Executive Overview",
-            "📊 Exploratory Data Analysis",
-            "🔮 Demand Forecasting & Models",
-            "⚠️ Anomaly Detection & Wastage",
-            "🧠 Explainable AI (SHAP)",
-            "🎛️ What-If Scenario Simulator",
-            "🏛️ Building Benchmarks & EUI",
-            "👥 About Us"
+            "Executive Overview",
+            "Exploratory Data Analysis",
+            "Demand Forecasting & Models",
+            "Anomaly Detection & Wastage",
+            "Explainable AI (SHAP)",
+            "What-If Scenario Simulator",
+            "Building Benchmarks & EUI",
+            "About Us"
         ]
     )
 
@@ -182,66 +263,11 @@ def main():
     building_profiles = artifacts["building_profiles"]
     shap_importance_df = artifacts["shap_importance_df"]
 
-    # main header with typewriter loop
-    st.markdown("""
-    <div style="margin-bottom: 4px;">
-        <span style="font-size: 2.3rem; font-weight: 800; background: linear-gradient(90deg, #2563EB, #3B82F6, #06B6D4, #10B981, #60A5FA, #2563EB); background-size: 300% 300%; animation: energyFlow 6s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: inline-block;">
-            Campus Energy Intelligence
-        </span>
-    </div>
-    <div style="font-size: 1.12rem; font-weight: 600; color: #64748B; margin-bottom: 12px; min-height: 30px;">
-        <span>Automated Platform for </span>
-        <span id="tw-text" style="background: linear-gradient(90deg, #2563EB, #06B6D4, #10B981, #3B82F6); background-size: 200% 200%; animation: energyFlow 5s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 700;"></span><span class="tw-cursor">|</span>
-    </div>
-    <div class="energy-flow-bar"></div>
 
-    <script>
-    (function() {
-        const phrases = [
-            "Multi-Building Load Forecasting.",
-            "Real-Time Anomaly & Wastage Detection.",
-            "Energy Risk Scoring & Diagnostics.",
-            "Explainable AI (SHAP) Model Insights.",
-            "Operational What-If Scenario Simulations."
-        ];
-        let pIndex = 0;
-        let charIndex = 0;
-        let isDeleting = false;
-        
-        function typeLoop() {
-            const targetEl = document.getElementById("tw-text");
-            if (!targetEl) return;
-            const currentPhrase = phrases[pIndex];
-            
-            if (isDeleting) {
-                targetEl.textContent = currentPhrase.substring(0, charIndex - 1);
-                charIndex--;
-            } else {
-                targetEl.textContent = currentPhrase.substring(0, charIndex + 1);
-                charIndex++;
-            }
-            
-            let typeSpeed = isDeleting ? 30 : 65;
-            
-            if (!isDeleting && charIndex === currentPhrase.length) {
-                typeSpeed = 1800;
-                isDeleting = true;
-            } else if (isDeleting && charIndex === 0) {
-                isDeleting = false;
-                pIndex = (pIndex + 1) % phrases.length;
-                typeSpeed = 450;
-            }
-            
-            setTimeout(typeLoop, typeSpeed);
-        }
-        setTimeout(typeLoop, 300);
-    })();
-    </script>
-    """, unsafe_allow_html=True)
 
     # overview tab
-    if menu == "🏢 Executive Overview":
-        st.subheader("🏢 Campus Energy Operational Command Center")
+    if menu == "Executive Overview":
+        st.subheader("Campus Energy Operational Command Center", anchor=False)
         
         total_anomalies = int((test_df["detected_anomaly"] == 1).sum())
         total_wasted_kwh = float(test_df["wasted_energy_kwh"].sum())
@@ -272,7 +298,7 @@ def main():
             fig_agg.add_trace(go.Scatter(
                 x=campus_hourly["timestamp"], y=campus_hourly["total_power_kwh"],
                 mode="lines", name="Actual Power (kWh)",
-                line=dict(color="#2563EB", width=2.5, shape="spline")
+                line=dict(color="#047857", width=2.5, shape="spline")
             ))
             fig_agg.add_trace(go.Scatter(
                 x=campus_hourly["timestamp"], y=campus_hourly["forecast_kwh"],
@@ -307,11 +333,11 @@ def main():
             fig_gauge = go.Figure(go.Indicator(
                 mode="gauge+number+delta",
                 value=risk_val,
-                title={'text': scope_title, 'font': {'size': 15, 'color': '#1E3A8A'}},
+                title={'text': scope_title, 'font': {'size': 15, 'color': '#065F46'}},
                 delta={'reference': 45, 'increasing': {'color': "#EF4444"}, 'decreasing': {'color': "#10B981"}},
                 gauge={
                     'axis': {'range': [0, 100], 'tickwidth': 1, 'tickcolor': "#475569"},
-                    'bar': {'color': "#3B82F6", 'thickness': 0.25},
+                    'bar': {'color': "#059669", 'thickness': 0.25},
                     'bgcolor': "white",
                     'borderwidth': 2,
                     'bordercolor': "#E2E8F0",
@@ -348,8 +374,8 @@ def main():
         st.dataframe(pd.DataFrame(b_summary), width="stretch", hide_index=True)
 
     # eda tab
-    elif menu == "📊 Exploratory Data Analysis":
-        st.subheader("📊 Campus Energy Consumption & Weather EDA")
+    elif menu == "Exploratory Data Analysis":
+        st.subheader("Campus Energy Consumption & Weather EDA", anchor=False)
         
         b_select = st.selectbox("Select Campus Building", list(building_profiles.keys()), format_func=lambda x: x.replace("_", " "))
         b_df = featured_df[featured_df["building_id"] == b_select].copy()
@@ -368,7 +394,7 @@ def main():
                     diurnal, x="hour", y="total_power_kwh", color="Day Type",
                     title="Diurnal Load Profile",
                     labels={"hour": "Hour of Day (0-23)", "total_power_kwh": "Mean Consumption (kWh)"},
-                    color_discrete_map={"Weekday": "#3B82F6", "Weekend": "#F59E0B"}
+                    color_discrete_map={"Weekday": "#059669", "Weekend": "#F59E0B"}
                 )
                 fig_diurn.update_layout(transition=dict(duration=800, easing="cubic-in-out"))
                 st.plotly_chart(fig_diurn, config={"displayModeBar": False}, width="stretch")
@@ -400,7 +426,7 @@ def main():
                 corr_cols = ["total_power_kwh", "temperature_c", "humidity_pct", "solar_radiation_wm2", "occupancy_rate", "cooling_degree_hours"]
                 corr_mat = b_df[corr_cols].corr()
                 fig_corr = px.imshow(
-                    corr_mat, text_auto=True, aspect="auto", color_continuous_scale="Blues",
+                    corr_mat, text_auto=True, aspect="auto", color_continuous_scale="Greens",
                     title="Correlation Matrix with Environmental Features"
                 )
                 st.plotly_chart(fig_corr, config={"displayModeBar": False}, width="stretch")
@@ -411,7 +437,7 @@ def main():
             fig_sub = go.Figure()
             fig_sub.add_trace(go.Scatter(x=sub_components["timestamp"], y=sub_components["hvac_power_kwh"], name="HVAC", stackgroup="one", fillcolor="rgba(239, 68, 68, 0.6)"))
             fig_sub.add_trace(go.Scatter(x=sub_components["timestamp"], y=sub_components["lighting_power_kwh"], name="Lighting", stackgroup="one", fillcolor="rgba(234, 179, 8, 0.6)"))
-            fig_sub.add_trace(go.Scatter(x=sub_components["timestamp"], y=sub_components["equipment_power_kwh"], name="Equipment / Plug Load", stackgroup="one", fillcolor="rgba(59, 130, 246, 0.6)"))
+            fig_sub.add_trace(go.Scatter(x=sub_components["timestamp"], y=sub_components["equipment_power_kwh"], name="Equipment / Plug Load", stackgroup="one", fillcolor="rgba(5, 150, 105, 0.6)"))
             fig_sub.update_layout(title="Sub-System Stacked Energy Draw (Past 7 Days)", yaxis_title="Power (kWh)", xaxis_title="Timestamp", transition=dict(duration=800))
             st.plotly_chart(fig_sub, config={"displayModeBar": False}, width="stretch")
 
@@ -424,8 +450,8 @@ def main():
             st.plotly_chart(fig_heat, config={"displayModeBar": False}, width="stretch")
 
     # forecasting tab
-    elif menu == "🔮 Demand Forecasting & Models":
-        st.subheader("🔮 Supervised Energy Forecasting & Model Comparative Benchmark")
+    elif menu == "Demand Forecasting & Models":
+        st.subheader("Supervised Energy Forecasting & Model Comparative Benchmark", anchor=False)
         
         st.markdown("#### 🏆 Model Benchmark Leaderboard")
         comp_df = pd.DataFrame(metrics_summary["model_comparison"])
@@ -458,7 +484,7 @@ def main():
         ))
         fig_fore.add_trace(go.Scatter(
             x=slice_b["timestamp"], y=slice_b["chosen_forecast_kwh"],
-            mode="lines", name=f"{model_choice} Forecast", line=dict(color="#2563EB", width=2.5, dash="dot", shape="spline")
+            mode="lines", name=f"{model_choice} Forecast", line=dict(color="#059669", width=2.5, dash="dot", shape="spline")
         ))
         fig_fore.update_layout(
             title=f"Actual vs Predicted Load ({b_choice.replace('_', ' ')}) - Last {forecast_window} Days",
@@ -474,7 +500,7 @@ def main():
         with col_r1:
             fig_res_dist = px.histogram(
                 residuals, nbins=35, title="Residual Error Distribution (e = y - ŷ)",
-                labels={"value": "Error (kWh)"}, color_discrete_sequence=["#6366F1"]
+                labels={"value": "Error (kWh)"}, color_discrete_sequence=["#10B981"]
             )
             fig_res_dist.update_layout(transition=dict(duration=800))
             st.plotly_chart(fig_res_dist, config={"displayModeBar": False}, width="stretch")
@@ -491,8 +517,8 @@ def main():
             st.plotly_chart(fig_qq, config={"displayModeBar": False}, width="stretch")
 
     # anomaly detection tab
-    elif menu == "⚠️ Anomaly Detection & Wastage":
-        st.subheader("⚠️ Campus Energy Anomaly Detection & Wastage Diagnostic Center")
+    elif menu == "Anomaly Detection & Wastage":
+        st.subheader("Campus Energy Anomaly Detection & Wastage Diagnostic Center", anchor=False)
         
         col_f1, col_f2, col_f3 = st.columns(3)
         with col_f1:
@@ -535,7 +561,7 @@ def main():
         ))
         
         anom_points = sample_anom_view[sample_anom_view["detected_anomaly"] == 1]
-        sev_color_map = {"Critical": "#DC2626", "High": "#EA580C", "Medium": "#CA8A04", "Low": "#2563EB"}
+        sev_color_map = {"Critical": "#DC2626", "High": "#EA580C", "Medium": "#CA8A04", "Low": "#059669"}
         
         for sev, group in anom_points.groupby("detected_severity"):
             fig_anom.add_trace(go.Scatter(
@@ -556,8 +582,8 @@ def main():
         st.dataframe(anom_data[display_cols].sort_values("timestamp", ascending=False).head(50), width="stretch", hide_index=True)
 
     # explainability tab
-    elif menu == "🧠 Explainable AI (SHAP)":
-        st.subheader("🧠 Explainable AI (XAI) with SHAP")
+    elif menu == "Explainable AI (SHAP)":
+        st.subheader("Explainable AI (XAI) with SHAP", anchor=False)
         
         col_x1, col_x2 = st.columns([1, 1])
         with col_x1:
@@ -565,7 +591,7 @@ def main():
             fig_shap_glob = px.bar(
                 shap_importance_df.head(15),
                 x="Mean_Abs_SHAP", y="Feature", orientation="h",
-                color="Mean_Abs_SHAP", color_continuous_scale="Blues",
+                color="Mean_Abs_SHAP", color_continuous_scale="Greens",
                 title="Top 15 Influential Predictors Across Entire Campus"
             )
             fig_shap_glob.update_layout(yaxis=dict(autorange="reversed"), height=450, transition=dict(duration=800, easing="cubic-out"))
@@ -607,8 +633,8 @@ def main():
             st.plotly_chart(fig_waterfall, config={"displayModeBar": False}, width="stretch")
 
     # simulator tab
-    elif menu == "🎛️ What-If Scenario Simulator":
-        st.subheader("🎛️ Campus Operational What-If Scenario Simulator")
+    elif menu == "What-If Scenario Simulator":
+        st.subheader("Campus Operational What-If Scenario Simulator", anchor=False)
         
         c_ctrl1, c_ctrl2, c_ctrl3 = st.columns(3)
         with c_ctrl1:
@@ -667,8 +693,8 @@ def main():
         st.plotly_chart(fig_sim, config={"displayModeBar": False}, width="stretch")
 
     # benchmarking tab
-    elif menu == "🏛️ Building Benchmarks & EUI":
-        st.subheader("🏛️ Multi-Building Energy Benchmarking & Efficiency Scorecard")
+    elif menu == "Building Benchmarks & EUI":
+        st.subheader("Multi-Building Energy Benchmarking & Efficiency Scorecard", anchor=False)
         
         eui_records = []
         for b_name, b_info in building_profiles.items():
@@ -723,21 +749,21 @@ def main():
             st.plotly_chart(fig_par, config={"displayModeBar": False}, width="stretch")
 
     # about us tab
-    elif menu == "👥 About Us":
-        st.subheader("👥 Project Development Team & Academic Scope")
+    elif menu == "About Us":
+        st.subheader("Project Development Team & Academic Scope", anchor=False)
         st.markdown("---")
         
         col_dev1, col_dev2 = st.columns(2)
         with col_dev1:
             st.markdown("""
             <div class="metric-card">
-                <h3 style="color: #1E3A8A; margin-bottom: 6px;">👨‍💻 Amit Kumar Singh</h3>
+                <h3 style="color: #065F46; margin-bottom: 6px;">👨‍💻 Amit Kumar Singh</h3>
                 <p style="color: #64748B; font-size: 0.95rem; margin-bottom: 12px;"><b>Lead ML & Architecture Developer</b></p>
                 <p style="font-size: 0.9rem; line-height: 1.5; color: #1E293B;">
                 Architected the end-to-end Machine Learning pipeline, supervised forecasting model zoo (XGBoost, LightGBM, Random Forest, Stacking Ensemble), Isolation Forest anomaly scoring engine, SHAP explainability visualizers, and interactive cloud deployment.
                 </p>
                 <div style="margin-top: 15px;">
-                    <a href="https://github.com/Amit0730" target="_blank" style="display: inline-block; background-color: #2563EB; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Amit's GitHub Profile</a>
+                    <a href="https://github.com/Amit0730" target="_blank" style="display: inline-block; background-color: #059669; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Amit's GitHub Profile</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
@@ -745,13 +771,13 @@ def main():
         with col_dev2:
             st.markdown("""
             <div class="metric-card">
-                <h3 style="color: #0D9488; margin-bottom: 6px;">👨‍💻 Atharva</h3>
+                <h3 style="color: #065F46; margin-bottom: 6px;">👨‍💻 Atharva</h3>
                 <p style="color: #64748B; font-size: 0.95rem; margin-bottom: 12px;"><b>Data Science & Energy Modeling Collaborator</b></p>
                 <p style="font-size: 0.9rem; line-height: 1.5; color: #1E293B;">
                 Collaborated on multi-facility campus domain research, building energy load profiling (EUI and PAR benchmarking), exploratory meteorological correlation analysis, and operational what-if scenario parameter formulation.
                 </p>
                 <div style="margin-top: 15px;">
-                    <a href="https://github.com/Amit0730" target="_blank" style="display: inline-block; background-color: #0D9488; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Atharva's GitHub Profile</a>
+                    <a href="https://github.com/Amit0730" target="_blank" style="display: inline-block; background-color: #059669; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Atharva's GitHub Profile</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
