@@ -771,13 +771,13 @@ def main():
         with col_dev2:
             st.markdown("""
             <div class="metric-card">
-                <h3 style="color: #065F46; margin-bottom: 6px;">👨‍💻 Atharva</h3>
+                <h3 style="color: #065F46; margin-bottom: 6px;">👨‍💻 Atharva Rotake</h3>
                 <p style="color: #64748B; font-size: 0.95rem; margin-bottom: 12px;"><b>Data Science & Energy Modeling Collaborator</b></p>
                 <p style="font-size: 0.9rem; line-height: 1.5; color: #1E293B;">
                 Collaborated on multi-facility campus domain research, building energy load profiling (EUI and PAR benchmarking), exploratory meteorological correlation analysis, and operational what-if scenario parameter formulation.
                 </p>
                 <div style="margin-top: 15px;">
-                    <a href="https://github.com/Amit0730" target="_blank" style="display: inline-block; background-color: #059669; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Atharva's GitHub Profile</a>
+                    <a href="https://github.com/Atharvarotake" target="_blank" style="display: inline-block; background-color: #059669; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Atharva's GitHub Profile</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
