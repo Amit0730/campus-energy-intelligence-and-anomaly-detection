@@ -777,7 +777,7 @@ def main():
                 Collaborated on multi-facility campus domain research, building energy load profiling (EUI and PAR benchmarking), exploratory meteorological correlation analysis, and operational what-if scenario parameter formulation.
                 </p>
                 <div style="margin-top: 15px;">
-                    <a href="https://github.com/Atharvarotake" target="_blank" style="display: inline-block; background-color: #059669; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Atharva's GitHub Profile</a>
+                    <a href="https://github.com/atharva3456" target="_blank" style="display: inline-block; background-color: #059669; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Atharva's GitHub Profile</a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
