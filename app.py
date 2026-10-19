@@ -30,16 +30,52 @@ st.set_page_config(
 # css styling and animations
 st.markdown("""
 <style>
-    /* page transition */
+    /* -------------------------------------------------------------
+       GOOGLE FONTS IMPORT & GLOBAL TYPOGRAPHY
+       ------------------------------------------------------------- */
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+    html, body, [class*="css"], .stApp {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+        color: #0F172A;
+        background-color: #F8FAFC !important;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    code, pre, .mono, [data-testid="stMetricValue"] {
+        font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    /* Page transition */
     @keyframes pageSlideFade {
-        0% { opacity: 0; transform: translateY(12px); }
+        0% { opacity: 0; transform: translateY(10px); }
         100% { opacity: 1; transform: translateY(0); }
     }
     .main .block-container {
-        animation: pageSlideFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        animation: pageSlideFade 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        padding-top: 1.25rem !important;
+        padding-bottom: 3rem !important;
+        max-width: 96% !important;
     }
-    
-    /* header energy flow animation */
+
+    /* Custom sleek scrollbar */
+    ::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
+    ::-webkit-scrollbar-track {
+        background: #F1F5F9;
+    }
+    ::-webkit-scrollbar-thumb {
+        background: #CBD5E1;
+        border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+        background: #10B981;
+    }
+
+    /* Header energy flow animation */
     @keyframes energyFlow {
         0% { background-position: 0% 50%; }
         50% { background-position: 100% 50%; }
@@ -55,57 +91,185 @@ st.markdown("""
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         margin-bottom: 0.2rem;
+        letter-spacing: -0.02em;
     }
     .sub-header {
-        color: #4B5563;
-        font-size: 1.05rem;
+        color: #64748B;
+        font-size: 1.02rem;
         margin-bottom: 1.2rem;
+        font-weight: 500;
     }
-    
-    /* kpi cards (clean white and green styling) */
+
+    /* -------------------------------------------------------------
+       STREAMLIT METRIC CARDS (TRANSFORMED INTO ULTRA-MODERN CARDS)
+       ------------------------------------------------------------- */
+    [data-testid="stMetric"] {
+        background: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 14px !important;
+        padding: 16px 20px !important;
+        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.04), 0 1px 2px -1px rgba(0, 0, 0, 0.02) !important;
+        transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        position: relative !important;
+        overflow: hidden !important;
+    }
+    [data-testid="stMetric"]::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3.5px;
+        background: linear-gradient(90deg, #059669, #10B981, #34D399);
+        border-radius: 14px 14px 0 0;
+    }
+    [data-testid="stMetric"]:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 14px 28px -6px rgba(5, 150, 105, 0.16), 0 4px 8px -2px rgba(5, 150, 105, 0.06) !important;
+        border-color: #A7F3D0 !important;
+    }
+    [data-testid="stMetricLabel"] {
+        margin-bottom: 4px !important;
+    }
+    [data-testid="stMetricLabel"] p {
+        font-size: 0.78rem !important;
+        font-weight: 700 !important;
+        color: #64748B !important;
+        letter-spacing: 0.06em !important;
+        text-transform: uppercase !important;
+    }
+    [data-testid="stMetricValue"] div {
+        font-family: 'JetBrains Mono', monospace !important;
+        font-weight: 800 !important;
+        font-size: 1.65rem !important;
+        color: #0F172A !important;
+        letter-spacing: -0.02em !important;
+    }
+    [data-testid="stMetricDelta"] {
+        font-weight: 600 !important;
+        font-size: 0.8rem !important;
+        margin-top: 4px !important;
+    }
+
+    /* -------------------------------------------------------------
+       CUSTOM CARD STYLING & HERO COMPONENTS
+       ------------------------------------------------------------- */
     .metric-card {
         background: #FFFFFF;
-        border-radius: 12px;
-        padding: 20px;
+        border-radius: 14px;
+        padding: 24px;
         border: 1px solid #E2E8F0;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.03);
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02), 0 1px 2px rgba(0,0,0,0.03);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
         position: relative;
         overflow: hidden;
     }
     .metric-card:hover {
         transform: translateY(-4px);
-        box-shadow: 0 12px 24px -6px rgba(16, 185, 129, 0.25);
+        box-shadow: 0 14px 28px -6px rgba(16, 185, 129, 0.2);
         border-color: #10B981;
     }
-    
-    /* anomaly alerts */
+
+    /* Hero Banner Card */
+    .hero-banner {
+        background: linear-gradient(135deg, #064E3B 0%, #065F46 45%, #047857 85%, #059669 100%);
+        padding: 22px 28px;
+        border-radius: 16px;
+        margin-bottom: 24px;
+        box-shadow: 0 10px 25px -5px rgba(6, 78, 59, 0.25);
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    .hero-banner::after {
+        content: '';
+        position: absolute;
+        right: -30px;
+        top: -30px;
+        width: 220px;
+        height: 220px;
+        background: radial-gradient(circle, rgba(52, 211, 153, 0.25) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+    }
+
+    /* Badges */
+    .badge-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 4px 12px;
+        border-radius: 9999px;
+        font-size: 0.76rem;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+    }
+    .badge-glass {
+        background: rgba(255, 255, 255, 0.18);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        color: #FFFFFF;
+    }
+    .badge-gold {
+        background: rgba(251, 191, 36, 0.25);
+        border: 1px solid rgba(251, 191, 36, 0.45);
+        color: #FEF3C7;
+    }
+    .badge-pulse-green {
+        background: rgba(16, 185, 129, 0.25);
+        border: 1px solid rgba(52, 211, 153, 0.5);
+        color: #A7F3D0;
+    }
+
+    /* -------------------------------------------------------------
+       ANOMALY PULSE ALERTS
+       ------------------------------------------------------------- */
     @keyframes pulseRing {
-        0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
-        70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); }
-        100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        0% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+        70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(239, 68, 68, 0); }
+        100% { transform: scale(0.96); box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
     }
     .anomaly-pulse-critical {
         display: inline-block;
-        background-color: #EF4444;
+        background: linear-gradient(135deg, #DC2626, #EF4444);
         color: white;
-        padding: 4px 10px;
+        padding: 4px 12px;
         border-radius: 20px;
         font-weight: 700;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
+        letter-spacing: 0.03em;
         animation: pulseRing 2s infinite;
+        box-shadow: 0 2px 6px rgba(239, 68, 68, 0.4);
     }
     .anomaly-pulse-high {
         display: inline-block;
-        background-color: #F97316;
+        background: linear-gradient(135deg, #D97706, #F59E0B);
         color: white;
-        padding: 4px 10px;
+        padding: 4px 12px;
         border-radius: 20px;
         font-weight: 700;
-        font-size: 0.85rem;
+        font-size: 0.82rem;
+        box-shadow: 0 2px 6px rgba(245, 158, 11, 0.35);
     }
-    
-    /* hide chart modebars and menus */
+
+    /* -------------------------------------------------------------
+       PLOTLY CHARTS CONTAINER STYLING
+       ------------------------------------------------------------- */
+    [data-testid="stPlotlyChart"] {
+        background: #FFFFFF !important;
+        border-radius: 14px !important;
+        border: 1px solid #E2E8F0 !important;
+        padding: 10px 14px !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02) !important;
+        transition: all 0.25s ease !important;
+    }
+    [data-testid="stPlotlyChart"]:hover {
+        border-color: #CBD5E1 !important;
+        box-shadow: 0 8px 18px -4px rgba(0, 0, 0, 0.04) !important;
+    }
+
+    /* Hide plotly chart modebars and menus */
     button[title="View fullscreen"], [data-testid="StyledFullScreenButton"] {
         display: none !important;
         visibility: hidden !important;
@@ -115,7 +279,7 @@ st.markdown("""
         visibility: hidden !important;
     }
 
-    /* hide header anchor links / chain icons */
+    /* Hide header anchor links / chain icons */
     [data-testid="stHeaderActionElements"],
     .stHeading [data-testid="stHeaderActionElements"],
     [data-testid="stHeading"] a,
@@ -129,28 +293,98 @@ st.markdown("""
         width: 0 !important;
         height: 0 !important;
     }
-    
-    /* typewriter cursor (emerald green) */
-    @keyframes cursorBlink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
+
+    /* -------------------------------------------------------------
+       TABS STYLING (PILL TABS WITH EMERALD GRADIENT)
+       ------------------------------------------------------------- */
+    [data-testid="stTabs"] {
+        gap: 8px !important;
+        padding-bottom: 10px !important;
+        margin-bottom: 1.5rem !important;
+        border-bottom: 1px solid #E2E8F0 !important;
     }
-    .tw-cursor {
-        font-weight: 900;
-        color: #059669;
-        font-size: 1.25rem;
-        animation: cursorBlink 0.75s infinite;
-        margin-left: 2px;
+    button[data-baseweb="tab"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 10px !important;
+        padding: 8px 18px !important;
+        font-weight: 600 !important;
+        font-size: 0.88rem !important;
+        color: #475569 !important;
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+    }
+    button[data-baseweb="tab"]:hover {
+        background-color: #F0FDF4 !important;
+        color: #047857 !important;
+        border-color: #A7F3D0 !important;
+        transform: translateY(-1px) !important;
+    }
+    button[data-baseweb="tab"][aria-selected="true"] {
+        background: linear-gradient(135deg, #065F46 0%, #059669 100%) !important;
+        color: #FFFFFF !important;
+        border-color: #047857 !important;
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.28) !important;
+    }
+    div[data-baseweb="tab-highlight"],
+    div[data-baseweb="tab-border"] {
+        display: none !important;
     }
 
-    /* =========================================================
+    /* -------------------------------------------------------------
+       DATAFRAME / TABLE POLISH
+       ------------------------------------------------------------- */
+    [data-testid="stDataFrame"] {
+        background: #FFFFFF !important;
+        border-radius: 12px !important;
+        border: 1px solid #E2E8F0 !important;
+        box-shadow: 0 2px 8px -2px rgba(0, 0, 0, 0.03) !important;
+        overflow: hidden !important;
+    }
+
+    /* -------------------------------------------------------------
+       FORM INPUTS & SELECTBOXES
+       ------------------------------------------------------------- */
+    div[data-baseweb="select"] > div {
+        border-radius: 10px !important;
+        border-color: #CBD5E1 !important;
+        background-color: #FFFFFF !important;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.02) !important;
+        font-weight: 500 !important;
+        transition: all 0.2s ease !important;
+    }
+    div[data-baseweb="select"] > div:hover {
+        border-color: #10B981 !important;
+    }
+    div[data-baseweb="select"] > div:focus-within {
+        border-color: #059669 !important;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18) !important;
+    }
+    .stTextInput input {
+        border-radius: 10px !important;
+        border: 1px solid #CBD5E1 !important;
+        background-color: #FFFFFF !important;
+        font-weight: 500 !important;
+        padding: 10px 14px !important;
+        transition: all 0.2s ease !important;
+    }
+    .stTextInput input:focus {
+        border-color: #059669 !important;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18) !important;
+    }
+    span[data-baseweb="tag"] {
+        background-color: #ECFDF5 !important;
+        border: 1px solid #A7F3D0 !important;
+        border-radius: 8px !important;
+    }
+    span[data-baseweb="tag"] span {
+        color: #065F46 !important;
+        font-weight: 600 !important;
+    }
+
+    /* -------------------------------------------------------------
        PERMANENT SPLIT SCREEN LAYOUT & SIDEBAR LOCK (WHITE & GREEN THEME)
-       - Removes the '<' / '<<' collapse and expand toggle buttons
-       - Keeps the sidebar permanently fixed and visible on the left
-       - Maintains consistent width and length (split-screen layout)
-       - Clean mint-green sidebar background with crisp emerald border
-       ========================================================= */
-
+       ------------------------------------------------------------- */
     /* Hide sidebar collapse (< / <<) and expand (> / >>) toggle buttons */
     [data-testid="stSidebarCollapseButton"],
     [data-testid="stExpandSidebarButton"],
@@ -169,7 +403,7 @@ st.markdown("""
         padding: 0 !important;
     }
 
-    /* Lock the sidebar permanently in place with NO split line or dividing border */
+    /* Lock the sidebar permanently in place */
     section[data-testid="stSidebar"] {
         min-width: 320px !important;
         max-width: 330px !important;
@@ -179,15 +413,15 @@ st.markdown("""
         display: flex !important;
         flex-direction: column !important;
         flex-shrink: 0 !important;
-        background-color: #F0FDF4 !important;
-        border-right: none !important;
+        background-color: #F4FBF7 !important;
+        border-right: 1px solid #E2E8F0 !important;
         border: none !important;
         box-shadow: none !important;
         outline: none !important;
         transition: none !important;
     }
 
-    /* Completely eliminate any divider lines, pseudo-element borders, or resizer lines */
+    /* Completely eliminate resizers and pseudo-element borders */
     section[data-testid="stSidebar"]::after,
     section[data-testid="stSidebar"]::before,
     [data-testid="stSidebarResizer"],
@@ -204,17 +438,80 @@ st.markdown("""
         pointer-events: none !important;
     }
 
-    /* Ensure parent app container has no split border */
-    div[data-testid="stAppViewContainer"] > section:first-child {
-        border-right: none !important;
-        box-shadow: none !important;
-    }
-
-    /* Clean up sidebar header spacing where the collapse button used to reside */
+    /* Clean up sidebar header spacing */
     [data-testid="stSidebarHeader"] {
         padding-top: 0.75rem !important;
         padding-bottom: 0.25rem !important;
         background-color: transparent !important;
+    }
+
+    /* -------------------------------------------------------------
+       SIDEBAR NAVIGATION RADIO BUTTONS AS SLEEK PILL BUTTONS
+       ------------------------------------------------------------- */
+    /* Hide the top group label "Navigation Modules" completely */
+    div[data-testid="stRadio"] > label {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+        height: 0 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    div[data-testid="stRadio"] > div {
+        gap: 6px !important;
+        padding: 4px 0 !important;
+    }
+    /* Style only the option labels inside the radiogroup */
+    div[data-testid="stRadio"] div[role="radiogroup"] label {
+        background: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 12px !important;
+        padding: 10px 14px !important;
+        margin-bottom: 2px !important;
+        cursor: pointer !important;
+        transition: none !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+        display: flex !important;
+        align-items: center !important;
+    }
+    /* NO HOVER EFFECT: remove hover border, background, translation, and box shadow */
+    div[data-testid="stRadio"] div[role="radiogroup"] label:hover {
+        background: #FFFFFF !important;
+        border-color: #E2E8F0 !important;
+        transform: none !important;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02) !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label:hover p {
+        color: #334155 !important;
+        font-weight: 500 !important;
+    }
+    /* Active / Checked state */
+    div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) {
+        background: linear-gradient(135deg, #065F46 0%, #059669 100%) !important;
+        border-color: #047857 !important;
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25) !important;
+        transform: none !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked):hover {
+        background: linear-gradient(135deg, #065F46 0%, #059669 100%) !important;
+        border-color: #047857 !important;
+        transform: none !important;
+    }
+    div[data-testid="stRadio"] div[role="radiogroup"] label:has(input:checked) p {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+    }
+    div[data-testid="stRadio"] label input[type="radio"],
+    div[data-testid="stRadio"] label div[role="radio"],
+    div[data-testid="stRadio"] label div:first-child:not(:last-child) {
+        display: none !important;
+    }
+    div[data-testid="stRadio"] label p {
+        margin: 0 !important;
+        font-size: 0.88rem !important;
+        color: #334155;
+        font-weight: 500;
+        transition: none !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -229,24 +526,34 @@ def get_artifacts():
 def main():
     # sidebar
     st.sidebar.markdown("""
-    <div style="font-size: 1.55rem; font-weight: 800; background: linear-gradient(90deg, #065F46, #059669, #10B981, #047857); background-size: 300% 300%; animation: energyFlow 6s ease infinite; -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 5px;">
-    Campus Energy Intelligence
+    <div style="padding: 2px 0 8px 0;">
+        <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <div style="background: linear-gradient(135deg, #059669, #047857); width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: white; box-shadow: 0 4px 10px rgba(5, 150, 105, 0.3);">⚡</div>
+            <div>
+                <div style="font-size: 1.2rem; font-weight: 800; color: #064E3B; line-height: 1.15; letter-spacing: -0.02em;">EnergyAI</div>
+                <div style="font-size: 0.7rem; font-weight: 700; color: #059669; letter-spacing: 0.05em; text-transform: uppercase;">Campus Intelligence</div>
+            </div>
+        </div>
     </div>
     """, unsafe_allow_html=True)
-    st.sidebar.divider()
+    st.sidebar.markdown("<div style='height: 1px; background: #E2E8F0; margin: 10px 0 14px 0;'></div>", unsafe_allow_html=True)
+
+    nav_labels = {
+        "Overview": "📊  Overview",
+        "Exploratory Data Analysis": "📈  Exploratory Data Analysis",
+        "Demand Forecasting & Models": "🔮  Forecasting & Models",
+        "Anomaly Detection & Wastage": "🚨  Anomaly & Wastage",
+        "SHAP": "🧠  SHAP",
+        "What-If Scenario Simulator": "🎛️  Scenario Simulator",
+        "Building Benchmarks & EUI": "🏛️  Building Benchmarks",
+        "About Us": "👥  About Project & Team"
+    }
 
     menu = st.sidebar.radio(
         "Navigation Modules",
-        [
-            "Executive Overview",
-            "Exploratory Data Analysis",
-            "Demand Forecasting & Models",
-            "Anomaly Detection & Wastage",
-            "Explainable AI (SHAP)",
-            "What-If Scenario Simulator",
-            "Building Benchmarks & EUI",
-            "About Us"
-        ]
+        list(nav_labels.keys()),
+        format_func=lambda x: nav_labels.get(x, x),
+        label_visibility="collapsed"
     )
 
     try:
@@ -263,10 +570,34 @@ def main():
     building_profiles = artifacts["building_profiles"]
     shap_importance_df = artifacts["shap_importance_df"]
 
-
-
     # overview tab
-    if menu == "Executive Overview":
+    if menu == "Overview":
+        # Executive Hero Banner - displayed only on Overview
+        st.markdown("""
+        <div class="hero-banner">
+            <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px; position: relative; z-index: 2;">
+                <div>
+                    <h1 style="margin: 0; font-size: 1.85rem; font-weight: 800; letter-spacing: -0.02em; color: white;">Campus Energy Intelligence & Anomaly Detection</h1>
+                    <p style="margin: 6px 0 0 0; color: #D1FAE5; font-size: 0.94rem; font-weight: 400; max-width: 780px;">
+                        Multi-Facility Electricity Forecasting • Unsupervised Isolation Forest Anomaly Engine • SHAP Explainability • Campus Digital Twin Simulator
+                    </p>
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <div style="background: rgba(0, 0, 0, 0.24); backdrop-filter: blur(8px); padding: 10px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.14); text-align: center; min-width: 100px;">
+                        <div style="font-size: 0.7rem; color: #A7F3D0; font-weight: 700; text-transform: uppercase;">Benchmark R²</div>
+                        <div style="font-size: 1.35rem; font-weight: 800; color: #34D399; font-family: 'JetBrains Mono', monospace;">0.8855</div>
+                        <div style="font-size: 0.68rem; color: #ECFDF5;">XGBoost</div>
+                    </div>
+                    <div style="background: rgba(0, 0, 0, 0.24); backdrop-filter: blur(8px); padding: 10px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.14); text-align: center; min-width: 100px;">
+                        <div style="font-size: 0.7rem; color: #A7F3D0; font-weight: 700; text-transform: uppercase;">Directional Acc</div>
+                        <div style="font-size: 1.35rem; font-weight: 800; color: #34D399; font-family: 'JetBrains Mono', monospace;">95.10%</div>
+                        <div style="font-size: 0.68rem; color: #ECFDF5;">Validation</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.markdown("<div style='font-size: 0.76rem; font-weight: 800; color: #059669; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;'>Module 01 • Real-Time Command Center</div>", unsafe_allow_html=True)
         st.subheader("Campus Energy Operational Command Center", anchor=False)
         
         total_anomalies = int((test_df["detected_anomaly"] == 1).sum())
@@ -375,6 +706,7 @@ def main():
 
     # eda tab
     elif menu == "Exploratory Data Analysis":
+        st.markdown("<div style='font-size: 0.76rem; font-weight: 800; color: #059669; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;'>Module 02 • Statistical Distributions & Correlations</div>", unsafe_allow_html=True)
         st.subheader("Campus Energy Consumption & Weather EDA", anchor=False)
         
         b_select = st.selectbox("Select Campus Building", list(building_profiles.keys()), format_func=lambda x: x.replace("_", " "))
@@ -451,6 +783,7 @@ def main():
 
     # forecasting tab
     elif menu == "Demand Forecasting & Models":
+        st.markdown("<div style='font-size: 0.76rem; font-weight: 800; color: #059669; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;'>Module 03 • Supervised Predictive Modeling & Evaluation</div>", unsafe_allow_html=True)
         st.subheader("Supervised Energy Forecasting & Model Comparative Benchmark", anchor=False)
         
         st.markdown("#### 🏆 Model Benchmark Leaderboard")
@@ -518,6 +851,7 @@ def main():
 
     # anomaly detection tab
     elif menu == "Anomaly Detection & Wastage":
+        st.markdown("<div style='font-size: 0.76rem; font-weight: 800; color: #059669; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;'>Module 04 • Unsupervised Anomaly Engine & Wastage Auditing</div>", unsafe_allow_html=True)
         st.subheader("Campus Energy Anomaly Detection & Wastage Diagnostic Center", anchor=False)
         
         col_f1, col_f2, col_f3 = st.columns(3)
@@ -582,8 +916,9 @@ def main():
         st.dataframe(anom_data[display_cols].sort_values("timestamp", ascending=False).head(50), width="stretch", hide_index=True)
 
     # explainability tab
-    elif menu == "Explainable AI (SHAP)":
-        st.subheader("Explainable AI (XAI) with SHAP", anchor=False)
+    elif menu == "SHAP":
+        st.markdown("<div style='font-size: 0.76rem; font-weight: 800; color: #059669; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;'>Module 05 • Explainable AI (XAI) & Attribution</div>", unsafe_allow_html=True)
+        st.subheader("SHAP (SHapley Additive exPlanations)", anchor=False)
         
         col_x1, col_x2 = st.columns([1, 1])
         with col_x1:
@@ -634,6 +969,7 @@ def main():
 
     # simulator tab
     elif menu == "What-If Scenario Simulator":
+        st.markdown("<div style='font-size: 0.76rem; font-weight: 800; color: #059669; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;'>Module 06 • Operational Scenario Digital Twin</div>", unsafe_allow_html=True)
         st.subheader("Campus Operational What-If Scenario Simulator", anchor=False)
         
         c_ctrl1, c_ctrl2, c_ctrl3 = st.columns(3)
@@ -694,6 +1030,7 @@ def main():
 
     # benchmarking tab
     elif menu == "Building Benchmarks & EUI":
+        st.markdown("<div style='font-size: 0.76rem; font-weight: 800; color: #059669; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;'>Module 07 • Efficiency Scorecards & Benchmarks</div>", unsafe_allow_html=True)
         st.subheader("Multi-Building Energy Benchmarking & Efficiency Scorecard", anchor=False)
         
         eui_records = []
@@ -750,45 +1087,71 @@ def main():
 
     # about us tab
     elif menu == "About Us":
+        st.markdown("<div style='font-size: 0.78rem; font-weight: 800; color: #059669; letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 2px;'>Module 08 • Academic Scope & Project Authors</div>", unsafe_allow_html=True)
         st.subheader("Project Development Team & Academic Scope", anchor=False)
         st.markdown("---")
         
         col_dev1, col_dev2 = st.columns(2)
         with col_dev1:
             st.markdown("""
-            <div class="metric-card">
-                <h3 style="color: #065F46; margin-bottom: 6px;">👨‍💻 Amit Kumar Singh</h3>
-                <p style="color: #64748B; font-size: 0.95rem; margin-bottom: 12px;"><b>Lead ML & Architecture Developer</b></p>
-                <p style="font-size: 0.9rem; line-height: 1.5; color: #1E293B;">
+            <div class="metric-card" style="border-top: 4px solid #059669; padding: 26px;">
+                <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+                    <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #059669, #047857); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: white; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);">
+                        👨‍💻
+                    </div>
+                    <div>
+                        <h3 style="color: #064E3B; margin: 0; font-size: 1.25rem; font-weight: 800;">Amit Kumar Singh</h3>
+                        <div style="color: #059669; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px;">Lead ML & Architecture Developer</div>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; line-height: 1.6; color: #334155; margin-bottom: 16px;">
                 Architected the end-to-end Machine Learning pipeline, supervised forecasting model zoo (XGBoost, LightGBM, Random Forest, Stacking Ensemble), Isolation Forest anomaly scoring engine, SHAP explainability visualizers, and interactive cloud deployment.
                 </p>
-                <div style="margin-top: 15px;">
-                    <a href="https://github.com/Amit0730" target="_blank" style="display: inline-block; background-color: #059669; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Amit's GitHub Profile</a>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px;">
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">XGBoost / LightGBM</span>
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">Stacking Regressor</span>
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">Isolation Forest</span>
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">TreeSHAP XAI</span>
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">Streamlit Cloud</span>
+                </div>
+                <div>
+                    <a href="https://github.com/Amit0730" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #059669, #047857); color: white; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.85rem; box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25);">
+                        <span>🐙 Amit's GitHub Profile ↗</span>
+                    </a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
             
         with col_dev2:
             st.markdown("""
-            <div class="metric-card">
-                <h3 style="color: #065F46; margin-bottom: 6px;">👨‍💻 Atharva Rotake</h3>
-                <p style="color: #64748B; font-size: 0.95rem; margin-bottom: 12px;"><b>Data Science & Energy Modeling Collaborator</b></p>
-                <p style="font-size: 0.9rem; line-height: 1.5; color: #1E293B;">
+            <div class="metric-card" style="border-top: 4px solid #10B981; padding: 26px;">
+                <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
+                    <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #10B981, #059669); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);">
+                        👨‍💻
+                    </div>
+                    <div>
+                        <h3 style="color: #064E3B; margin: 0; font-size: 1.25rem; font-weight: 800;">Atharva Rotake</h3>
+                        <div style="color: #059669; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px;">Data Science & Energy Modeling Collaborator</div>
+                    </div>
+                </div>
+                <p style="font-size: 0.9rem; line-height: 1.6; color: #334155; margin-bottom: 16px;">
                 Collaborated on multi-facility campus domain research, building energy load profiling (EUI and PAR benchmarking), exploratory meteorological correlation analysis, and operational what-if scenario parameter formulation.
                 </p>
-                <div style="margin-top: 15px;">
-                    <a href="https://github.com/atharva3456" target="_blank" style="display: inline-block; background-color: #059669; color: white; padding: 7px 16px; border-radius: 6px; text-decoration: none; font-weight: 600; font-size: 0.85rem;">🐙 Atharva's GitHub Profile</a>
+                <div style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px;">
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">EDA & Correlation</span>
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">EUI Benchmarks</span>
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">PAR Stress Metrics</span>
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">Scenario Formulation</span>
+                    <span style="background: #ECFDF5; border: 1px solid #A7F3D0; color: #065F46; padding: 3px 10px; border-radius: 6px; font-size: 0.74rem; font-weight: 700;">Domain Verification</span>
+                </div>
+                <div>
+                    <a href="https://github.com/atharva3456" target="_blank" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #059669, #047857); color: white; padding: 8px 18px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.85rem; box-shadow: 0 4px 10px rgba(5, 150, 105, 0.25);">
+                        <span>🐙 Atharva's GitHub Profile ↗</span>
+                    </a>
                 </div>
             </div>
             """, unsafe_allow_html=True)
-            
-        st.markdown("### 🎓 Academic Project Summary")
-        st.info(
-            "**Course**: INT395: Supervised Learning (Project 15)\n\n"
-            "**Project Title**: Campus Energy Consumption Intelligence & Anomaly Detection\n\n"
-            "**Source Code Repository**: [https://github.com/Amit0730/campus-energy-intelligence-and-anomaly-detection](https://github.com/Amit0730/campus-energy-intelligence-and-anomaly-detection)\n\n"
-            "**Live Cloud Deployment**: [https://campus-energy-intelligence.streamlit.app](https://campus-energy-intelligence.streamlit.app)"
-        )
+
 
 
 if __name__ == "__main__":
