@@ -12,6 +12,7 @@ from plotly.subplots import make_subplots
 import json
 import os
 import sys
+import base64
 
 # root code
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -1091,12 +1092,22 @@ def main():
         st.subheader("Project Development Team & Academic Scope", anchor=False)
         st.markdown("---")
         
+        pfp_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "amit_profile.jpg")
+        if os.path.exists(pfp_file):
+            try:
+                with open(pfp_file, "rb") as _f:
+                    amit_pfp_url = f"data:image/jpeg;base64,{base64.b64encode(_f.read()).decode('utf-8')}"
+            except Exception:
+                amit_pfp_url = "https://github.com/Amit0730.png"
+        else:
+            amit_pfp_url = "https://github.com/Amit0730.png"
+        
         col_dev1, col_dev2 = st.columns(2)
         with col_dev1:
-            st.markdown("""
+            st.markdown(f"""
             <div class="metric-card" style="border-top: 4px solid #059669; padding: 26px;">
                 <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
-                    <img src="https://github.com/Amit0730.png" alt="Amit Kumar Singh" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35); border: 2px solid #059669; flex-shrink: 0;">
+                    <img src="{amit_pfp_url}" alt="Amit Kumar Singh" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35); border: 2px solid #059669; flex-shrink: 0;">
                     <div>
                         <h3 style="color: #064E3B; margin: 0; font-size: 1.25rem; font-weight: 800;">Amit Kumar Singh</h3>
                         <div style="color: #059669; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px;">Lead ML & Architecture Developer</div>
