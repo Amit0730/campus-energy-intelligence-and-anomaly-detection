@@ -1,5 +1,6 @@
 # Python virtual environments
 .venv/
+.local/
 env/
 venv/
 ENV/
@@ -37,3 +38,5 @@ Viva/
 scripts/
 *.pptx
 *.pdf
+!data/day_ahead/assessment/*.pdf
+!data/day_ahead/assessment/*.pptx

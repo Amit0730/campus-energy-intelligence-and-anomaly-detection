@@ -1,0 +1,26 @@
+{
+  "building": "Panther_education_Teofila",
+  "source": "https://github.com/buds-lab/building-data-genome-project-2/blob/master/data/meters/cleaned/electricity_cleaned.csv",
+  "reference": "Miller et al. (2020), Building Data Genome 2, Scientific Data, doi:10.1038/s41597-020-00712-x.",
+  "sha256": "b6ffc9b4dfcefe5c753594730a08ae822b0d50fec6815abb8f185591e6c630a3",
+  "training_hours": 5238,
+  "test_hours": 8727,
+  "missing_meter_hours": 3388,
+  "excluded_hours": 3579,
+  "train_year": 2016,
+  "test_year": 2017,
+  "scores": {
+    "Yesterday": {
+      "MAE": 12.475,
+      "RMSE": 20.764
+    },
+    "Last week": {
+      "MAE": 17.197,
+      "RMSE": 29.764
+    },
+    "XGBoost": {
+      "MAE": 11.266,
+      "RMSE": 19.715
+    }
+  }
+}
