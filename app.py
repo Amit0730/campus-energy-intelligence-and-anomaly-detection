@@ -1096,9 +1096,7 @@ def main():
             st.markdown("""
             <div class="metric-card" style="border-top: 4px solid #059669; padding: 26px;">
                 <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 14px;">
-                    <div style="width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #059669, #047857); display: flex; align-items: center; justify-content: center; font-size: 1.6rem; color: white; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);">
-                        👨‍💻
-                    </div>
+                    <img src="https://github.com/Amit0730.png" alt="Amit Kumar Singh" style="width: 52px; height: 52px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35); border: 2px solid #059669; flex-shrink: 0;">
                     <div>
                         <h3 style="color: #064E3B; margin: 0; font-size: 1.25rem; font-weight: 800;">Amit Kumar Singh</h3>
                         <div style="color: #059669; font-size: 0.82rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px;">Lead ML & Architecture Developer</div>
